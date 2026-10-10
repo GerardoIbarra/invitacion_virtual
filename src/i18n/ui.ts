@@ -15,11 +15,10 @@ const es = {
 
   "lang.switch": "Idioma",
 
-  "envelope.to": "Te invito a mis",
-  "envelope.title": "XV Años",
-  "envelope.hint": "Toca el sello para abrir",
-  "envelope.open": "Abrir invitación",
-  "envelope.cardTitle": "Mis XV Años",
+  "welcome.to": "Te invito a mis",
+  "welcome.title": "XV Años",
+  "welcome.hint": "Toca el moño para abrir",
+  "welcome.open": "Abrir invitación",
 
 
   "hero.pretitle": "Con la bendición de Dios y el amor de mi familia",
@@ -101,11 +100,10 @@ const en: UI = {
 
   "lang.switch": "Language",
 
-  "envelope.to": "You're invited to my",
-  "envelope.title": "XV",
-  "envelope.hint": "Tap the seal to open",
-  "envelope.open": "Open invitation",
-  "envelope.cardTitle": "My XV",
+  "welcome.to": "You're invited to my",
+  "welcome.title": "XV",
+  "welcome.hint": "Tap the bow to open",
+  "welcome.open": "Open invitation",
 
 
   "hero.pretitle": "With God's blessing and the love of my family",

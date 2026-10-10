@@ -925,333 +925,470 @@ h1, h2, h3, p, blockquote, figcaption {
 }
 
 /* ==============================================================
-   SOBRE DE BIENVENIDA
+   PORTÓN DE BIENVENIDA
+   Arco de palacio con glicinas, puertas de vidrio con vista a un
+   jardín y un moño de satín. El interior del arco es transparente:
+   al abrirse las puertas se ve la invitación detrás.
    ============================================================== */
-.envelope-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: var(--z-overlay);
-  display: flex;
-  padding: 72px 16px 32px;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  background-color: var(--silk);
-  background-image:
-    var(--damask),
-    radial-gradient(ellipse 60% 45% at 50% 52%, #F6F1FA 0%, transparent 75%),
-    radial-gradient(ellipse 90% 60% at 50% 110%, var(--silk-deep) 0%, transparent 70%);
-  transition: opacity 0.9s ease, visibility 0.9s ease;
-}
 
-/* Mientras el sobre está cerrado, la invitación de atrás no se desplaza. */
+/* Mientras el portón está cerrado, la invitación de atrás no se desplaza. */
 body:not(.is-open) {
   overflow: hidden;
 }
 
-.envelope-overlay.opened {
+.gate {
+  --door: #EEE4F4;
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay);
+  display: grid;
+  place-items: center;
+  padding: 30px;
+  overflow: hidden;
+  transition: opacity 0.9s ease, visibility 0.9s ease, transform 1.2s ease;
+}
+
+.gate.opened {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
+  transform: scale(1.12);
 }
 
-.envelope-stage {
-  /* margin: auto centra cuando cabe; si no, no corta la parte de arriba. */
-  margin: auto;
+/* Sombra suave en las orillas de la pantalla, como luz de interior. */
+.gate::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(ellipse 75% 65% at 50% 45%, transparent 55%, rgba(92, 61, 124, 0.16) 100%);
+}
+
+.gate-frame {
+  position: relative;
+  z-index: 1;
+}
+
+.gate-arch {
+  /* Ancho limitado también por la altura, para que quepa acostado. */
+  --w: min(560px, calc(100vw - 60px), calc((100dvh - 60px) * 0.6));
+  position: relative;
+  width: var(--w);
+  height: min(calc(100dvh - 60px), calc(var(--w) * 2.2));
+  border-radius: 999px 999px 6px 6px;
+  overflow: hidden;
+  perspective: 1800px;
+  container-type: size;
+  cursor: pointer;
+  /* Molduras del arco (marfil y filetes dorados) y, fuera, la seda del fondo. */
+  box-shadow:
+    0 0 0 7px var(--paper),
+    0 0 0 8px var(--gold-soft),
+    0 0 0 13px var(--paper-warm),
+    0 0 0 14px rgba(203, 182, 137, 0.6),
+    0 0 0 200vmax var(--silk);
+}
+
+/* Filete dorado interior y sombra de profundidad, por encima de las puertas. */
+.gate-arch::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px var(--gold-soft), inset 0 0 50px rgba(70, 40, 90, 0.22);
+  pointer-events: none;
+}
+
+/* Clave del arco */
+.gate-keystone {
+  position: absolute;
+  z-index: 3;
+  top: -22px;
+  left: 50%;
+  width: clamp(38px, 9vw, 56px);
+  transform: translateX(-50%);
+  filter: drop-shadow(0 2px 3px rgba(70, 40, 90, 0.2));
+}
+
+/* Columnas a los lados: solo cuando hay espacio. */
+.gate-pilaster {
+  display: none;
+}
+
+@media (min-width: 760px) and (min-height: 560px) {
+  .gate-pilaster {
+    display: block;
+    position: absolute;
+    z-index: 2;
+    top: 32%;
+    bottom: -14px;
+    width: 46px;
+    border: 1px solid var(--gold-soft);
+    background:
+      repeating-linear-gradient(90deg, var(--paper) 0 7px, var(--paper-warm) 7px 9px, var(--paper) 9px 11px);
+    box-shadow: 0 10px 24px -10px rgba(70, 40, 90, 0.35);
+  }
+
+  .gate-pilaster-left {
+    left: -86px;
+  }
+
+  .gate-pilaster-right {
+    right: -86px;
+  }
+
+  /* Capitel y base */
+  .gate-pilaster::before,
+  .gate-pilaster::after {
+    content: "";
+    position: absolute;
+    left: -9px;
+    right: -9px;
+    height: 16px;
+    background: var(--paper);
+    border: 1px solid var(--gold-soft);
+  }
+
+  .gate-pilaster::before {
+    top: -17px;
+    border-radius: 3px 3px 0 0;
+    box-shadow: inset 0 -4px 0 var(--paper-warm);
+  }
+
+  .gate-pilaster::after {
+    bottom: -1px;
+  }
+}
+
+/* --- Puertas --- */
+.door {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  background-color: var(--door);
+  transition: transform 1.4s cubic-bezier(0.65, 0.05, 0.25, 1), filter 1.4s ease;
+}
+
+.door-left {
+  left: 0;
+  transform-origin: left center;
+  background-image: var(--grain), linear-gradient(90deg, rgba(255, 255, 255, 0.45), transparent 45%, rgba(92, 61, 124, 0.12));
+  box-shadow: inset -1px 0 0 rgba(140, 106, 60, 0.3), inset -6px 0 10px -6px rgba(70, 40, 90, 0.25);
+}
+
+.door-right {
+  right: 0;
+  transform-origin: right center;
+  background-image: var(--grain), linear-gradient(270deg, rgba(255, 255, 255, 0.45), transparent 45%, rgba(92, 61, 124, 0.12));
+  box-shadow: inset 1px 0 0 rgba(140, 106, 60, 0.3), inset 6px 0 10px -6px rgba(70, 40, 90, 0.25);
+}
+
+/* Ventanal: vista al jardín, marcos y reflejo. */
+.door-glass {
+  position: absolute;
+  top: 17%;
+  height: 43%;
+  left: 13%;
+  right: 13%;
+  overflow: hidden;
+  border: 4px solid var(--door);
+  outline: 1px solid var(--gold-soft);
+  box-shadow: inset 0 2px 8px rgba(70, 40, 90, 0.25);
+}
+
+.door-left .door-glass {
+  border-top-left-radius: 100% 32%;
+}
+
+.door-right .door-glass {
+  border-top-right-radius: 100% 32%;
+}
+
+.door-glass svg {
+  display: block;
   width: 100%;
-  max-width: 420px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 32px;
+  height: 100%;
 }
 
-.envelope-heading {
+.door-glass::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.45) 42%, transparent 50%),
+    linear-gradient(90deg, transparent calc(50% - 1.5px), var(--door) calc(50% - 1.5px), var(--door) calc(50% + 1.5px), transparent calc(50% + 1.5px)),
+    linear-gradient(0deg, transparent calc(33.3% - 1.5px), var(--door) calc(33.3% - 1.5px), var(--door) calc(33.3% + 1.5px), transparent calc(33.3% + 1.5px)),
+    linear-gradient(0deg, transparent calc(66.6% - 1.5px), var(--door) calc(66.6% - 1.5px), var(--door) calc(66.6% + 1.5px), transparent calc(66.6% + 1.5px));
+}
+
+/* Panel bajo con roseta al centro. */
+.door-panel {
+  position: absolute;
+  top: 66%;
+  bottom: 5%;
+  left: 13%;
+  right: 13%;
+  border: 1px solid var(--gold-soft);
+  outline: 1px solid rgba(203, 182, 137, 0.5);
+  outline-offset: 4px;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(203, 182, 137, 0.55) 0 3px, transparent 3.5px),
+    radial-gradient(circle at 50% 50%, transparent 11px, rgba(203, 182, 137, 0.55) 11.5px 12.5px, transparent 13px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.25), rgba(92, 61, 124, 0.06));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), inset 0 -2px 6px rgba(70, 40, 90, 0.12);
+}
+
+.gate.doors-open .door {
+  filter: brightness(0.8);
+}
+
+.gate.doors-open .door-left {
+  transform: rotateY(78deg);
+}
+
+.gate.doors-open .door-right {
+  transform: rotateY(-78deg);
+}
+
+/* --- Luz --- */
+.gate-light {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 40% at 50% 0%, rgba(255, 250, 238, 0.65), transparent 70%),
+    radial-gradient(ellipse 40% 25% at 50% 62%, rgba(255, 250, 238, 0.35), transparent 70%);
+  mix-blend-mode: screen;
+  transition: opacity 0.6s ease;
+}
+
+/* --- Glicinas --- */
+.wisteria {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+}
+
+.wisteria-back {
+  z-index: 3;
+  opacity: 0.75;
+  transform: translateY(2%) scale(0.98);
+}
+
+.wisteria-front {
+  z-index: 4;
+  filter: drop-shadow(0 3px 3px rgba(70, 40, 90, 0.2));
+}
+
+/* --- Placa con el texto, colgada de un cordón --- */
+.gate-text {
+  position: absolute;
+  z-index: 5;
+  top: 21%;
+  left: 50%;
+  width: min(64cqi, 29cqh);
+  transform: translateX(-50%);
   text-align: center;
   transition: opacity 0.5s ease;
 }
 
-.envelope-tiara {
-  width: 72px;
-  margin: 0 auto 12px;
+.plaque-cord {
+  display: block;
+  width: 70%;
+  height: min(9cqi, 4cqh);
+  margin: 0 auto -1px;
 }
 
-.env-to {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-size: 1.15rem;
-  color: var(--ink-soft);
-}
-
-.env-occasion {
-  font-family: var(--font-script);
-  font-size: clamp(3.2rem, 15vw, 4.4rem);
-  line-height: 1.1;
-  color: var(--lilac-deep);
-}
-
-.env-date {
-  margin-top: 4px;
-  font-family: var(--font-display);
-  font-size: 1rem;
-  font-variant: small-caps;
-  letter-spacing: 0.1em;
-  color: var(--ink);
-}
-
-.envelope {
-  --fold-line: rgba(140, 106, 60, 0.16);
-  position: relative;
-  width: 100%;
-  aspect-ratio: 10 / 7;
-  perspective: 1400px;
-  cursor: pointer;
-  filter: drop-shadow(0 22px 28px rgba(70, 40, 90, 0.28));
-  transition: transform 0.4s ease;
-}
-
-@media (hover: hover) {
-  .envelope:not(.flap-opened):hover {
-    transform: translateY(-3px);
-  }
-}
-
-.env-liner,
-.env-front {
-  position: absolute;
-  inset: 0;
-  border-radius: 3px;
-}
-
-/* Forro interior: damasco lila */
-.env-liner {
-  z-index: 1;
-  background-color: var(--lilac);
-  background-image: var(--damask);
-  background-size: 36px 36px;
-}
-
-.env-card {
-  position: absolute;
-  z-index: 2;
-  left: 7%;
-  right: 7%;
-  top: 6%;
-  height: 88%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
-  background-color: var(--paper);
-  background-image: var(--grain);
-  border: 1px solid var(--paper-edge);
-  transition: transform 1s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-.env-card-tiara {
-  width: 48px;
-  margin-bottom: 4px;
-}
-
-.env-card-title {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-size: 1rem;
-  color: var(--ink-soft);
-}
-
-.env-card-name {
-  font-family: var(--font-script);
-  font-size: 2.6rem;
-  line-height: 1.1;
-  color: var(--lilac-deep);
-}
-
-.env-front {
-  z-index: 3;
-  clip-path: polygon(0 0, 50% 54%, 100% 0, 100% 100%, 0 100%);
+.plaque {
+  padding: min(5cqi, 2.3cqh) min(4cqi, 1.8cqh) min(4.5cqi, 2cqh);
+  --dot: rgba(168, 138, 85, 0.75);
+  /* Un punto dorado en cada esquina, dentro del doble filete. */
   background:
-    linear-gradient(to top right, transparent calc(50% - 1px), var(--fold-line) 50%, transparent calc(50% + 1px)) left bottom / 50% 100% no-repeat,
-    linear-gradient(to top left, transparent calc(50% - 1px), var(--fold-line) 50%, transparent calc(50% + 1px)) right bottom / 50% 100% no-repeat,
+    radial-gradient(circle at 12px 12px, var(--dot) 0 2px, transparent 2.5px),
+    radial-gradient(circle at calc(100% - 12px) 12px, var(--dot) 0 2px, transparent 2.5px),
+    radial-gradient(circle at 12px calc(100% - 12px), var(--dot) 0 2px, transparent 2.5px),
+    radial-gradient(circle at calc(100% - 12px) calc(100% - 12px), var(--dot) 0 2px, transparent 2.5px),
     var(--grain),
-    linear-gradient(180deg, var(--paper) 0%, var(--paper-warm) 100%);
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  padding-bottom: 3.5%;
+    var(--paper);
+  border: 1px solid var(--gold-soft);
+  outline: 1px solid rgba(203, 182, 137, 0.6);
+  outline-offset: -6px;
+  border-radius: 3px;
+  box-shadow: 0 10px 20px -8px rgba(70, 40, 90, 0.45);
 }
 
-.env-name {
+.gate-tiara {
+  width: min(12cqi, 5.5cqh);
+  margin: 0 auto min(1.2cqi, 0.55cqh);
+}
+
+.gate-to {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: min(4.2cqi, 1.9cqh);
+  color: var(--ink-soft);
+}
+
+.gate-occasion {
   font-family: var(--font-script);
-  font-size: clamp(2rem, 9vw, 2.7rem);
-  line-height: 1;
+  font-size: min(13cqi, 5.9cqh);
+  line-height: 1.05;
+  color: var(--lilac-deep);
+}
+
+.gate-name {
+  margin-top: min(0.6cqi, 0.3cqh);
+  font-family: var(--font-display);
+  font-size: min(5.2cqi, 2.4cqh);
+  font-variant: small-caps;
+  letter-spacing: 0.3em;
+  margin-right: -0.3em;
   color: var(--ink);
 }
 
-.env-flap {
+.gate-date {
+  margin-top: min(1.2cqi, 0.55cqh);
+  font-family: var(--font-display);
+  font-size: min(3.3cqi, 1.5cqh);
+  font-variant: small-caps;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+}
+
+/* --- Listón y moño --- */
+.gate-ribbon {
   position: absolute;
-  z-index: 4;
-  top: 0;
+  z-index: 6;
   left: 0;
   right: 0;
-  height: 56%;
-  clip-path: polygon(0 0, 100% 0, 50% 100%);
-  background: var(--grain), linear-gradient(180deg, #F7F1E7 0%, #E8DCC8 100%);
-  transform-origin: top center;
-  /* La solapa pasa detrás de la tarjeta a mitad del giro. */
-  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), z-index 0s linear 0.4s;
-}
-
-.envelope.flap-opened .env-flap {
-  transform: rotateX(180deg);
-  z-index: 1;
-  background-color: var(--lilac);
-  background-image: var(--damask);
-  background-size: 36px 36px;
-}
-
-.envelope.card-slide-out .env-card {
-  transform: translateY(-58%);
-}
-
-/* Listón de satín: brillo horizontal a lo largo, como tela real. */
-.env-ribbon {
-  position: absolute;
-  z-index: 5;
-  left: 0;
-  right: 0;
-  top: 56%;
-  height: 22px;
+  top: 63%;
+  height: min(5.5cqi, 2.5cqh);
   transform: translateY(-50%);
-  background: linear-gradient(180deg, #5E3F7E 0%, #8F6CB2 22%, #C2A6DB 42%, #9E7DC0 58%, #6E4C91 82%, #4F3270 100%);
+  background: linear-gradient(180deg, #5E3F7E 0%, #9473B8 22%, #CBB2E1 42%, #A587C6 58%, #74529A 82%, #523473 100%);
   box-shadow: 0 2px 4px rgba(50, 20, 70, 0.25);
   transition: transform 0.5s cubic-bezier(0.5, 0, 0.75, 0), opacity 0.5s ease;
 }
 
-.env-bow {
-  position: absolute;
-  z-index: 6;
-  top: 56%;
-  left: 50%;
-  width: 84%;
-  height: auto;
-  /* El nudo del moño (y = 52 de 120) queda justo bajo el sello. */
-  transform: translate(-50%, -43.3%);
-  filter: drop-shadow(0 3px 3px rgba(50, 20, 70, 0.3));
-  transition: transform 0.45s ease-in, opacity 0.45s ease-in;
-}
-
-/* Al tocar el sello: el moño se desata y el listón se recoge. */
-.envelope.untied .env-bow {
-  opacity: 0;
-  transform: translate(-50%, -43.3%) scale(0.5) rotate(-12deg);
-}
-
-.envelope.untied .env-ribbon {
-  opacity: 0;
-  transform: translateY(-50%) scaleX(0);
-}
-
-/* Sello de cera con el monograma en relieve (mismo color, no dorado). */
-.wax-seal {
+.gate-bow {
   position: absolute;
   z-index: 7;
-  top: 56%;
+  top: 63%;
   left: 50%;
-  width: 78px;
-  height: 78px;
+  width: min(74cqi, 33.7cqh);
   padding: 0;
   border: none;
-  transform: translate(-50%, -50%);
-  border-radius: 50% 46% 53% 48% / 48% 54% 46% 52%;
-  background: radial-gradient(circle at 34% 28%, #B48ED0 0%, #7C51A3 38%, #5A3580 70%, #42245F 100%);
-  box-shadow:
-    0 5px 10px rgba(50, 20, 70, 0.4),
-    inset 0 2px 3px rgba(255, 255, 255, 0.3),
-    inset 0 -4px 8px rgba(30, 0, 50, 0.4);
-  animation: sealBreathe 3.2s ease-in-out infinite;
-  transition: transform 0.25s ease;
+  background: none;
+  /* El nudo (y = 60 de 250) queda sobre el listón. */
+  transform: translate(-50%, -24%);
+  filter: drop-shadow(0 6px 6px rgba(50, 20, 70, 0.3));
+  transition: transform 0.5s ease-in, opacity 0.5s ease-in;
 }
 
-@keyframes sealBreathe {
-  0%, 100% { box-shadow: 0 5px 10px rgba(50, 20, 70, 0.4), inset 0 2px 3px rgba(255, 255, 255, 0.3), inset 0 -4px 8px rgba(30, 0, 50, 0.4), 0 0 0 0 rgba(138, 104, 171, 0.35); }
-  50% { box-shadow: 0 5px 10px rgba(50, 20, 70, 0.4), inset 0 2px 3px rgba(255, 255, 255, 0.3), inset 0 -4px 8px rgba(30, 0, 50, 0.4), 0 0 0 10px rgba(138, 104, 171, 0); }
+.gate-bow svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  transform-origin: 50% 24%;
+  animation: bowBreathe 3s ease-in-out infinite;
+}
+
+@keyframes bowBreathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
 }
 
 @media (hover: hover) {
-  .wax-seal:hover {
-    transform: translate(-50%, -50%) scale(1.05);
+  .gate-bow:hover svg {
+    animation-play-state: paused;
+    transform: scale(1.05);
   }
 }
 
-.wax-seal-inner {
+/* --- Destellos --- */
+.sparkle {
   position: absolute;
-  inset: 12px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  box-shadow: inset 0 1px 2px rgba(20, 0, 40, 0.45), 0 1px 0 rgba(255, 255, 255, 0.2);
-  font-family: var(--font-display);
-  font-style: italic;
-  font-size: 1.45rem;
-  color: #6E4693;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3), 0 -1px 0 rgba(30, 0, 50, 0.45);
-}
-
-.wax-seal.broken {
-  animation: sealBreak 0.6s ease-in forwards;
-}
-
-@keyframes sealBreak {
-  40% { transform: translate(-50%, -50%) scale(1.12) rotate(-8deg); }
-  100% { transform: translate(-50%, -50%) scale(0.4) rotate(20deg); opacity: 0; visibility: hidden; }
-}
-
-.envelope-hint {
-  font-style: italic;
-  font-size: 1.05rem;
-  color: var(--ink-soft);
+  z-index: 7;
+  left: var(--x);
+  top: var(--y);
+  width: min(4cqi, 1.8cqh);
+  fill: #FFF9EA;
+  filter: drop-shadow(0 0 3px rgba(255, 244, 214, 0.9));
+  pointer-events: none;
+  animation: twinkle 3.2s ease-in-out var(--d) infinite;
   transition: opacity 0.4s ease;
 }
 
-.envelope-overlay.opening .envelope-hint,
-.envelope-overlay.opening .envelope-heading {
+@keyframes twinkle {
+  0%, 100% { opacity: 0; transform: scale(0.4) rotate(0deg); }
+  50% { opacity: 1; transform: scale(1) rotate(45deg); }
+}
+
+.gate-hint {
+  position: absolute;
+  z-index: 5;
+  left: 0;
+  right: 0;
+  bottom: 2.2%;
+  text-align: center;
+  font-style: italic;
+  font-size: min(4.4cqi, 2cqh);
+  color: var(--ink-soft);
+  text-shadow: 0 0 8px var(--door), 0 0 3px var(--door);
+  transition: opacity 0.4s ease;
+}
+
+/* --- Pétalos que caen sobre toda la pantalla --- */
+.gate-petals {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.gate-petals svg {
+  position: absolute;
+  top: -40px;
+  left: var(--x);
+  width: var(--s);
+  opacity: 0.85;
+  filter: drop-shadow(0 1px 1px rgba(70, 40, 90, 0.15));
+  animation: petalFall var(--t) linear var(--d) infinite;
+}
+
+@keyframes petalFall {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  50% { transform: translate(var(--sway), 55vh) rotate(200deg); }
+  100% { transform: translate(0, 112vh) rotate(400deg); }
+}
+
+/* --- Apertura --- */
+.gate.opening .gate-text,
+.gate.opening .gate-hint,
+.gate.opening .sparkle,
+.gate.opening .gate-light {
   opacity: 0;
 }
 
-/* Pantallas bajas (celular acostado): el encabezado a un lado y el sobre al
-   otro, con el sobre ajustado a la altura para que todo quepa sin desplazarse. */
-@media (orientation: landscape) and (max-height: 520px) {
-  .envelope-overlay {
-    padding: 16px 24px;
-  }
+.gate.opening .sparkle {
+  animation: none;
+}
 
-  .envelope-stage {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    grid-template-areas:
-      "heading envelope"
-      "hint envelope";
-    align-items: center;
-    gap: 16px 40px;
-    max-width: 860px;
-  }
+.gate.untied .gate-bow {
+  opacity: 0;
+  transform: translate(-50%, -24%) scale(0.6) rotate(-8deg);
+}
 
-  .envelope-heading {
-    grid-area: heading;
-    align-self: end;
-  }
-
-  .envelope-hint {
-    grid-area: hint;
-    align-self: start;
-    text-align: center;
-  }
-
-  .envelope {
-    grid-area: envelope;
-    width: min(52vw, calc((100dvh - 32px) * 10 / 7));
-  }
+.gate.untied .gate-ribbon {
+  opacity: 0;
+  transform: translateY(-50%) scaleX(0);
 }
 
 /* ==============================================================

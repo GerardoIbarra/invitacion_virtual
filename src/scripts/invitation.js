@@ -9,10 +9,10 @@ const $ = (id) => document.getElementById(id);
 const fullName = `${event.quinceName} ${event.quinceSurname}`.trim();
 
 // ---------------------------------------------------------------------------
-// Sobre
+// Portón de bienvenida
 // ---------------------------------------------------------------------------
 // Al cambiar de idioma con la invitación ya abierta, la página nueva se abre
-// directo en el mismo punto en lugar de mostrar otra vez el sobre.
+// directo en el mismo punto en lugar de mostrar otra vez el portón.
 const RESUME_KEY = "xv_resume_scroll";
 
 function takeResumePosition() {
@@ -36,12 +36,12 @@ function initLanguageLinks() {
   });
 }
 
-function initEnvelope() {
-  const seal = $("wax-seal");
-  const box = $("envelope-box");
-  const overlay = $("envelope-overlay");
+function initGate() {
+  const gate = $("gate");
+  const arch = $("gate-arch");
+  const bow = $("gate-bow");
   const main = $("invitation-main");
-  if (!seal || !box || !overlay || !main) return;
+  if (!gate || !arch || !bow || !main) return;
 
   main.inert = true;
   let opened = false;
@@ -52,7 +52,7 @@ function initEnvelope() {
 
   const resumeAt = takeResumePosition();
   if (resumeAt !== null) {
-    overlay.style.transition = "none";
+    gate.style.transition = "none";
     main.style.transition = "none";
     open({ instant: true });
     window.scrollTo(0, resumeAt);
@@ -65,26 +65,26 @@ function initEnvelope() {
     if (opened) return;
     opened = true;
 
-    // Se desata el moño, luego se abre la solapa, sale la tarjeta y aparece la invitación.
-    const steps = instant || prefersReducedMotion ? [0, 0, 0] : [450, 850, 1650];
-    overlay.classList.add("opening");
-    seal.classList.add("broken");
-    box.classList.add("untied");
+    // Se desata el moño, se abren las puertas (dejando ver la invitación
+    // detrás) y al final el portón se desvanece como si se entrara por él.
+    const steps = instant || prefersReducedMotion ? [0, 0] : [450, 1500];
+    gate.classList.add("opening", "untied");
     if (!instant) window.scrollTo({ top: 0, behavior: "instant" });
-    setTimeout(() => box.classList.add("flap-opened"), steps[0]);
-    setTimeout(() => box.classList.add("card-slide-out"), steps[1]);
     setTimeout(() => {
-      overlay.classList.add("opened");
-      overlay.inert = true;
-      main.inert = false;
+      gate.classList.add("doors-open");
       main.classList.remove("blurred-init");
+    }, steps[0]);
+    setTimeout(() => {
+      gate.classList.add("opened");
+      gate.inert = true;
+      main.inert = false;
       main.focus({ preventScroll: true });
       document.body.classList.add("is-open");
-    }, steps[2]);
+    }, steps[1]);
   }
 
-  seal.addEventListener("click", () => open());
-  box.addEventListener("click", () => open());
+  // Todo el arco abre, no solo el moño: es más fácil de atinar.
+  arch.addEventListener("click", () => open());
 }
 
 // ---------------------------------------------------------------------------
@@ -292,7 +292,7 @@ function initFloatingCta() {
 // ---------------------------------------------------------------------------
 initLanguageLinks();
 initParticles();
-initEnvelope();
+initGate();
 initCountdown();
 initRSVP();
 initFloatingCta();

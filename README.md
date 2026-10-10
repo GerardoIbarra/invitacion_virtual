@@ -61,7 +61,7 @@ En el proyecto de Cloudflare Pages: **Custom domains → Set up a custom domain*
 - [ ] Número de WhatsApp real en `src/data/event.ts` (con código de país; EE. UU. es `1`). Mientras sea el de ejemplo, `npm run build` muestra un aviso.
 - [ ] Nombre y dirección de la iglesia y del salón en Charlotte.
 - [ ] Dirección final en `site` (ver arriba).
-- [ ] Probar el link en un celular: abrir el sobre, confirmar por WhatsApp y agregar al calendario (Google y iPhone).
+- [ ] Probar el link en un celular: abrir el portón, confirmar por WhatsApp y agregar al calendario (Google y iPhone).
 
 ## Privacidad
 

@@ -1,0 +1,247 @@
+---
+// Entrada: arco de palacio con glicinas, puertas de vidrio con vista a un
+// jardín y un moño de satín. Al tocarlo, se desata y las puertas se abren.
+import { event, formatLongDate } from '../data/event';
+import { useTranslations, type Lang } from '../i18n/ui';
+import Tiara from './Tiara.astro';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+// Todo lo "aleatorio" usa una semilla fija: siempre sale igual al compilar.
+function seeded(seed: number) {
+  return () => {
+    seed |= 0;
+    seed = (seed + 0x6d2b79f5) | 0;
+    let x = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    x = (x + Math.imul(x ^ (x >>> 7), 61 | x)) ^ x;
+    return ((x ^ (x >>> 14)) >>> 0) / 4294967296;
+  };
+}
+const r1 = (n: number) => Math.round(n * 10) / 10;
+type RGB = [number, number, number];
+const mixColor = (a: RGB, b: RGB, k: number) =>
+  `rgb(${a.map((c, i) => Math.round(c + (b[i] - c) * k)).join(',')})`;
+
+// --- Glicinas -------------------------------------------------------------
+// El arco del SVG coincide con el del portón: semicírculo de radio 200 en un ancho de 400.
+const R = 200;
+const arcY = (x: number) => R - Math.sqrt(Math.max(0, R * R - (x - R) ** 2));
+
+type Floret = { x: number; y: number; r: number; fill: string };
+type Leaf = { x: number; y: number; angle: number };
+
+function wisteria(opts: {
+  seed: number; clusters: number; from: number; to: number;
+  short: number; long: number; top: RGB; tip: RGB; perRow: number; size: number;
+}) {
+  const rand = seeded(opts.seed);
+  const florets: Floret[] = [];
+  const leaves: Leaf[] = [];
+  for (let c = 0; c < opts.clusters; c++) {
+    const ax = opts.from + (c * (opts.to - opts.from)) / (opts.clusters - 1) + (rand() - 0.5) * 12;
+    const ay = arcY(ax) + 6;
+    // Largos a los lados, cortos al centro para dejar libre la placa.
+    const edge = Math.min(1, Math.abs(ax - R) / 175);
+    const length = opts.short + opts.long * edge ** 1.6 + rand() * 26;
+    const sway = rand() * Math.PI * 2;
+    const rows = Math.round(length / 5);
+    for (let k = 0; k <= rows; k++) {
+      const p = k / rows;
+      const cx = ax + Math.sin(p * 2.6 + sway) * 3.5;
+      const spread = (1 - p) * 8.5 + 1.5;
+      const n = p > 0.85 ? 1 : opts.perRow;
+      for (let j = 0; j < n; j++) {
+        florets.push({
+          x: r1(cx + (rand() - 0.5) * 2 * spread),
+          y: r1(ay + p * length + (rand() - 0.5) * 2),
+          r: r1((3.9 * (1 - p) + 1.5 + rand() * 0.7) * opts.size),
+          fill: mixColor(opts.top, opts.tip, Math.min(1, p * 0.95 + rand() * 0.15)),
+        });
+      }
+    }
+    leaves.push({ x: r1(ax - 7), y: r1(ay - 1), angle: r1(-30 - rand() * 25) });
+    leaves.push({ x: r1(ax + 7), y: r1(ay + 1), angle: r1(30 + rand() * 25) });
+    if (rand() > 0.5) leaves.push({ x: r1(ax), y: r1(ay - 4), angle: r1((rand() - 0.5) * 40) });
+  }
+  // Las flores de abajo encima, como cuelgan de verdad.
+  florets.sort((a, b) => a.y - b.y);
+  return { florets, leaves };
+}
+
+const back = wisteria({ seed: 2026, clusters: 20, from: 24, to: 376, short: 30, long: 120, top: [168, 138, 200], tip: [238, 230, 246], perRow: 1, size: 0.9 });
+const front = wisteria({ seed: 1107, clusters: 16, from: 30, to: 370, short: 36, long: 165, top: [116, 80, 160], tip: [228, 214, 242], perRow: 2, size: 1 });
+
+// --- Vista del jardín tras el vidrio ------------------------------------------
+// Una sola escena de 400×300; cada puerta muestra su mitad.
+const sceneRand = seeded(7);
+const trees = Array.from({ length: 26 }, (_, i) => ({
+  x: r1(i * 16 + sceneRand() * 10),
+  y: r1(176 + sceneRand() * 18),
+  r: r1(14 + sceneRand() * 14),
+  fill: sceneRand() > 0.45 ? '#C7B2DE' : '#B4C1A4',
+}));
+const balusters = Array.from({ length: 25 }, (_, i) => 8 + i * 16);
+
+// --- Destellos y pétalos -------------------------------------------------------
+const sparkles = [
+  { x: 24, y: 60, d: 0 }, { x: 77, y: 66, d: 1.1 }, { x: 16, y: 41, d: 2.2 },
+  { x: 86, y: 30, d: 0.6 }, { x: 50, y: 7, d: 1.7 }, { x: 64, y: 54, d: 2.8 },
+];
+const petalRand = seeded(15);
+const petals = Array.from({ length: 12 }, () => ({
+  x: r1(petalRand() * 100),
+  dur: r1(10 + petalRand() * 8),
+  delay: r1(-petalRand() * 18),
+  sway: Math.round((petalRand() - 0.5) * 120),
+  size: Math.round(10 + petalRand() * 8),
+  fill: petalRand() > 0.5 ? '#B99AD6' : '#D9C6EC',
+}));
+---
+<div id="gate" class="gate">
+  <div class="gate-frame">
+    <span class="gate-pilaster gate-pilaster-left" aria-hidden="true"></span>
+    <span class="gate-pilaster gate-pilaster-right" aria-hidden="true"></span>
+
+    <div class="gate-arch" id="gate-arch">
+      {(['left', 'right'] as const).map((side) => (
+        <div class={`door door-${side}`} aria-hidden="true">
+          <div class="door-glass">
+            <svg viewBox={side === 'left' ? '0 0 200 300' : '200 0 200 300'} preserveAspectRatio="xMidYMid slice">
+              <defs>
+                <linearGradient id={`sky-${side}`} x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#E9DDF6" />
+                  <stop offset="0.6" stop-color="#F7EEF2" />
+                  <stop offset="1" stop-color="#F3E6DC" />
+                </linearGradient>
+                <radialGradient id={`sun-${side}`} cx="200" cy="120" r="150" gradientUnits="userSpaceOnUse">
+                  <stop offset="0" stop-color="#FFFDF7" stop-opacity="0.95" />
+                  <stop offset="1" stop-color="#FFFDF7" stop-opacity="0" />
+                </radialGradient>
+                <linearGradient id={`floor-${side}`} x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#E8DDEF" />
+                  <stop offset="1" stop-color="#D3C2E2" />
+                </linearGradient>
+              </defs>
+              <rect width="400" height="300" fill={`url(#sky-${side})`} />
+              <rect width="400" height="300" fill={`url(#sun-${side})`} />
+              <path d="M0 190 C70 168 130 182 200 172 C270 162 330 180 400 170 L400 215 L0 215 Z" fill="#DCCFEA" />
+              <g opacity="0.85">
+                {trees.map((tr) => <circle cx={tr.x} cy={tr.y} r={tr.r} fill={tr.fill} />)}
+              </g>
+              <rect x="0" y="205" width="400" height="9" fill="#F6F0E8" stroke="#D8CAB4" stroke-width="0.7" />
+              <g fill="#F1E8DC" stroke="#D8CAB4" stroke-width="0.6">
+                {balusters.map((x) => (
+                  <path d={`M${x - 4} 214 C${x - 7} 222 ${x - 2} 228 ${x - 5} 236 C${x - 6} 244 ${x + 6} 244 ${x + 5} 236 C${x + 2} 228 ${x + 7} 222 ${x + 4} 214 Z`} />
+                ))}
+              </g>
+              <rect x="0" y="244" width="400" height="10" fill="#F6F0E8" stroke="#D8CAB4" stroke-width="0.7" />
+              <rect x="0" y="254" width="400" height="46" fill={`url(#floor-${side})`} />
+            </svg>
+          </div>
+          <div class="door-panel"></div>
+        </div>
+      ))}
+
+      <div class="gate-light" aria-hidden="true"></div>
+
+      {[back, front].map((w, i) => (
+        <svg class={`wisteria ${i === 0 ? 'wisteria-back' : 'wisteria-front'}`} viewBox="0 0 400 360" aria-hidden="true">
+          {i === 1 && (
+            <>
+              <path d="M22 108 A200 200 0 0 1 378 108" fill="none" stroke="#8B7A68" stroke-width="2.4" stroke-linecap="round" />
+              <path d="M40 74 A200 200 0 0 1 360 74" fill="none" stroke="#8B7A68" stroke-width="1.3" stroke-linecap="round" opacity="0.6" />
+            </>
+          )}
+          <g fill={i === 0 ? '#AEBB9C' : '#8FA07A'}>
+            {w.leaves.map((l) => (
+              <ellipse cx={l.x} cy={l.y} rx="8" ry="2.9" transform={`rotate(${l.angle} ${l.x} ${l.y})`} />
+            ))}
+          </g>
+          <g>{w.florets.map((f) => <circle cx={f.x} cy={f.y} r={f.r} fill={f.fill} />)}</g>
+        </svg>
+      ))}
+
+      <div class="gate-text">
+        <svg class="plaque-cord" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M14 40 L50 2 L86 40" fill="none" stroke="#B89A62" stroke-width="1.4" vector-effect="non-scaling-stroke" />
+          <circle cx="50" cy="3" r="2.6" fill="#CBB689" />
+        </svg>
+        <div class="plaque">
+          <Tiara class="gate-tiara" />
+          <p class="gate-to">{t('welcome.to')}</p>
+          <p class="gate-occasion">{t('welcome.title')}</p>
+          <p class="gate-name">{event.quinceName}</p>
+          <p class="gate-date">{formatLongDate(event.startsAt, lang)}</p>
+        </div>
+      </div>
+
+      <div class="gate-ribbon" aria-hidden="true"></div>
+
+      <button type="button" class="gate-bow" id="gate-bow" aria-label={t('welcome.open')}>
+        <svg viewBox="0 0 240 250" aria-hidden="true">
+          <defs>
+            <linearGradient id="gate-satin" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#CDB4E3" />
+              <stop offset="0.45" stop-color="#9775BB" />
+              <stop offset="1" stop-color="#5E3F7E" />
+            </linearGradient>
+            <linearGradient id="gate-fold" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#6E4B93" />
+              <stop offset="1" stop-color="#432660" />
+            </linearGradient>
+            <linearGradient id="gate-tail" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#7552A0" />
+              <stop offset="0.45" stop-color="#B597D4" />
+              <stop offset="1" stop-color="#6A4790" />
+            </linearGradient>
+            <radialGradient id="gate-knot" cx="0.4" cy="0.35" r="0.7">
+              <stop offset="0" stop-color="#C4A7DE" />
+              <stop offset="1" stop-color="#6A4790" />
+            </radialGradient>
+          </defs>
+          {[false, true].map((mirror) => (
+            <g transform={mirror ? 'translate(240 0) scale(-1 1)' : undefined}>
+              {/* Punta larga con corte en V */}
+              <path d="M112 66 C106 120 96 170 74 236 L88 229 L95 246 C112 180 120 124 126 70 Z" fill="url(#gate-tail)" />
+              {/* Lazo */}
+              <path d="M116 56 C96 14 30 2 22 36 C16 62 56 80 116 64 Z" fill="url(#gate-satin)" />
+              {/* Pliegue interior */}
+              <path d="M116 58 C96 36 52 28 42 42 C56 50 92 56 116 64 Z" fill="url(#gate-fold)" opacity="0.85" />
+              {/* Brillo */}
+              <path d="M104 38 C88 18 48 12 32 30" fill="none" stroke="#fff" stroke-opacity="0.45" stroke-width="2.4" stroke-linecap="round" />
+            </g>
+          ))}
+          <rect x="104" y="46" width="32" height="28" rx="9" fill="url(#gate-knot)" />
+          <path d="M110 52 C116 49 124 49 130 52" fill="none" stroke="#fff" stroke-opacity="0.4" stroke-width="2" stroke-linecap="round" />
+        </svg>
+      </button>
+
+      {sparkles.map((s) => (
+        <svg class="sparkle" viewBox="0 0 24 24" aria-hidden="true" style={`--x:${s.x}%;--y:${s.y}%;--d:${s.d}s`}>
+          <path d="M12 0 C13 8 16 11 24 12 C16 13 13 16 12 24 C11 16 8 13 0 12 C8 11 11 8 12 0 Z" />
+        </svg>
+      ))}
+
+      <p class="gate-hint" aria-hidden="true">{t('welcome.hint')}</p>
+    </div>
+
+    <svg class="gate-keystone" viewBox="0 0 60 46" aria-hidden="true">
+      <path d="M6 1 H54 L46 44 H14 Z" fill="#FBF7F0" stroke="#CBB689" stroke-width="1.2" />
+      <path d="M12 6 H48 L42 39 H18 Z" fill="none" stroke="#CBB689" stroke-width="0.8" opacity="0.7" />
+      <path d="M30 13 C34 18 34 24 30 30 C26 24 26 18 30 13 Z M22 22 C26 20 28 21 30 24 M38 22 C34 20 32 21 30 24" fill="none" stroke="#A88A55" stroke-width="1" stroke-linecap="round" />
+    </svg>
+  </div>
+
+  <div class="gate-petals" aria-hidden="true">
+    {petals.map((p) => (
+      <svg viewBox="0 0 20 28" style={`--x:${p.x}%;--t:${p.dur}s;--d:${p.delay}s;--sway:${p.sway}px;--s:${p.size}px`}>
+        <path d="M10 0 C17 6 19 15 10 28 C1 15 3 6 10 0 Z" fill={p.fill} />
+      </svg>
+    ))}
+  </div>
+</div>
