@@ -1,0 +1,37 @@
+---
+import { googleCalendarUrl, icsPath } from '../data/event';
+import { useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+<section class="section countdown-section" aria-labelledby="countdown-title">
+  <h2 class="section-title" id="countdown-title">{t('countdown.title')}</h2>
+
+  <div class="countdown" role="timer" aria-live="off">
+    <p class="countdown-unit">
+      <span class="countdown-val" id="cd-days">--</span>
+      <span class="countdown-label">{t('countdown.days')}</span>
+    </p>
+    <p class="countdown-unit">
+      <span class="countdown-val" id="cd-hours">--</span>
+      <span class="countdown-label">{t('countdown.hours')}</span>
+    </p>
+    <p class="countdown-unit">
+      <span class="countdown-val" id="cd-minutes">--</span>
+      <span class="countdown-label">{t('countdown.minutes')}</span>
+    </p>
+  </div>
+
+  <p class="calendar-links">
+    {t('countdown.calendar')}:{' '}
+    <a href={googleCalendarUrl(lang)} class="text-link" target="_blank" rel="noopener">Google</a>
+    {' · '}
+    <!-- En iPhone, abrir el .ics muestra directamente "Agregar al calendario". -->
+    <a href={icsPath(lang)} class="text-link">Apple / Outlook</a>
+  </p>
+</section>

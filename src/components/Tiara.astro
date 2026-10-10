@@ -1,0 +1,28 @@
+---
+// Tiara dibujada a línea. Se usa como sello de marca en lugar de un ícono genérico.
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+---
+<svg class={`tiara ${className}`} viewBox="0 0 120 56" aria-hidden="true" fill="none"
+  stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Banda -->
+  <path d="M12 48 Q60 57 108 48" />
+  <path d="M16 42 Q60 50 104 42" />
+  <!-- Crestería -->
+  <path d="M16 42 Q22 32 29 36 Q36 24 45 31 Q52 14 60 26 Q68 14 75 31 Q84 24 91 36 Q98 32 104 42" />
+  <!-- Filigrana interior -->
+  <path d="M29 36 Q33 41 38 39 M45 31 Q50 39 56 37 M64 37 Q70 39 75 31 M82 39 Q87 41 91 36" stroke-width="0.8" />
+  <!-- Gota central -->
+  <path d="M60 30 C64 35 64 40 60 42 C56 40 56 35 60 30 Z" stroke-width="0.9" />
+  <!-- Perlas -->
+  <g fill="var(--paper, #FBF7F0)">
+    <circle cx="29" cy="33" r="2" />
+    <circle cx="45" cy="27.5" r="2.2" />
+    <circle cx="60" cy="9" r="3" />
+    <circle cx="75" cy="27.5" r="2.2" />
+    <circle cx="91" cy="33" r="2" />
+  </g>
+  <path d="M60 12 L60 22" stroke-width="0.9" />
+</svg>

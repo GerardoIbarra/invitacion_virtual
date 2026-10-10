@@ -1,0 +1,36 @@
+---
+import '../styles/global.css';
+import { event } from '../data/event';
+import { languages } from '../i18n/ui';
+import Tiara from '../components/Tiara.astro';
+import Flourish from '../components/Flourish.astro';
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#E4DAEE">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+  <title>Page not found · Página no encontrada</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..600;1,6..96,400..600&family=EB+Garamond:ital,wght@0,400..600;1,400..600&family=Pinyon+Script&display=swap" rel="stylesheet">
+</head>
+<body class="is-open">
+  <!-- Bilingüe: quien llega aquí todavía no eligió idioma. -->
+  <main class="paper not-found">
+    <Tiara class="hero-tiara" />
+    <p class="hero-name">{event.quinceName}</p>
+    <h1 class="section-title">This page doesn't exist</h1>
+    <p class="section-lede" lang="es">Esta página no existe</p>
+    <Flourish />
+    <p class="not-found-links">
+      <a class="btn" href={languages.en.path}>View the invitation</a>
+      <a class="text-link" href={languages.es.path} lang="es">Ver la invitación en español</a>
+    </p>
+  </main>
+</body>
+</html>

@@ -1,0 +1,28 @@
+---
+import { event } from '../data/event';
+import { useTranslations, type Lang } from '../i18n/ui';
+import Tiara from './Tiara.astro';
+
+interface Props {
+  lang: Lang;
+}
+
+const t = useTranslations(Astro.props.lang);
+---
+<footer class="invitation-footer">
+  <div class="monogram" aria-hidden="true">
+    <Tiara class="monogram-tiara" />
+    <span class="monogram-ring">
+      <span class="monogram-letter">{event.quinceName.charAt(0)}</span>
+    </span>
+  </div>
+
+  <p class="footer-blessing">{t('footer.blessing')}</p>
+  <p class="footer-love">
+    {t('footer.love')} {event.parents}
+  </p>
+
+  <p class="footer-share">
+    {t('footer.share')} <span class="hashtag">{event.hashtag}</span>
+  </p>
+</footer>

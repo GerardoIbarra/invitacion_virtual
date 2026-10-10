@@ -1,0 +1,104 @@
+---
+import '../styles/global.css';
+import { getImage } from 'astro:assets';
+import { event, PLACEHOLDER_PHONE } from '../data/event';
+import { languages, useTranslations, type Lang } from '../i18n/ui';
+import ogPhoto from '../assets/tiara.jpg';
+
+import AmbientParticles from '../components/AmbientParticles.astro';
+import LanguageSwitch from '../components/LanguageSwitch.astro';
+import Envelope from '../components/Envelope.astro';
+import Hero from '../components/Hero.astro';
+import Countdown from '../components/Countdown.astro';
+import ParentsGodparents from '../components/ParentsGodparents.astro';
+import Itinerary from '../components/Itinerary.astro';
+import DressCode from '../components/DressCode.astro';
+import RSVP from '../components/RSVP.astro';
+import VIPPass from '../components/VIPPass.astro';
+import Footer from '../components/Footer.astro';
+import Flourish from '../components/Flourish.astro';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+
+if ((event.whatsappPhone as string) === PLACEHOLDER_PHONE) {
+  console.warn(
+    '⚠  El número de WhatsApp en src/data/event.ts sigue siendo el de ejemplo: las confirmaciones no le llegarán a nadie.',
+  );
+}
+
+const t = useTranslations(lang);
+// Imagen horizontal (≈1.91:1), el formato que WhatsApp e iMessage muestran grande.
+// Se usa el ancho original de la foto porque Astro no agranda imágenes.
+const ogWidth = Math.min(1200, ogPhoto.width);
+const ogImage = await getImage({ src: ogPhoto, width: ogWidth, height: Math.round(ogWidth / 1.91), fit: 'cover', format: 'jpg' });
+const site = Astro.site!;
+const absolute = (path: string) => new URL(path, site).href;
+const pageUrl = absolute(languages[lang].path);
+---
+
+<!DOCTYPE html>
+<html lang={lang}>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#E4DAEE">
+  <!-- Invitación privada: que no aparezca en buscadores. -->
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="canonical" href={pageUrl}>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <title>{t('meta.title')(`${event.quinceName} ${event.quinceSurname}`)}</title>
+
+  <meta name="description" content={t('meta.description')(event.parents, event.quinceName)}>
+  <meta property="og:title" content={t('meta.title')(event.quinceName)}>
+  <meta property="og:description" content={t('meta.ogDescription')}>
+  <meta property="og:url" content={pageUrl}>
+  <meta property="og:image" content={absolute(ogImage.src)}>
+  <meta property="og:image:width" content={String(ogImage.attributes.width)}>
+  <meta property="og:image:height" content={String(ogImage.attributes.height)}>
+  <meta property="og:image:alt" content={t('hero.photoAlt')}>
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:locale" content={languages[lang].locale.replace('-', '_')}>
+  {Object.entries(languages).map(([code, l]) => (
+    <link rel="alternate" hreflang={code} href={absolute(l.path)}>
+  ))}
+  <link rel="alternate" hreflang="x-default" href={absolute(languages.en.path)}>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..600;1,6..96,400..600&family=EB+Garamond:ital,wght@0,400..600;1,400..600&family=Pinyon+Script&display=swap" rel="stylesheet">
+</head>
+<body>
+  <AmbientParticles />
+  <LanguageSwitch lang={lang} />
+  <Envelope lang={lang} />
+
+  <!--
+    Orden pensado en lo que el invitado viene a resolver:
+    cuándo → dónde → qué ponerse → confirmar. Lo emotivo y opcional va después.
+  -->
+  <main id="invitation-main" class="paper blurred-init" tabindex="-1">
+    <Hero lang={lang} />
+    <Countdown lang={lang} />
+    <Flourish />
+    <Itinerary lang={lang} />
+    <Flourish />
+    <DressCode lang={lang} />
+    <RSVP lang={lang} />
+    <VIPPass lang={lang} />
+    <Flourish />
+    <ParentsGodparents lang={lang} />
+    <Footer lang={lang} />
+  </main>
+
+  <a href="#rsvp-anchor" id="rsvp-cta" class="rsvp-cta" hidden>{t('rsvp.cta')}</a>
+
+  <script src="../scripts/invitation.js"></script>
+</body>
+</html>

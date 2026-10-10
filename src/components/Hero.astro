@@ -1,0 +1,49 @@
+---
+import { Image } from 'astro:assets';
+import { event, formatLongDate } from '../data/event';
+import { useTranslations, type Lang } from '../i18n/ui';
+import Tiara from './Tiara.astro';
+import tiara from '../assets/tiara.jpg';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+<header class="hero-section">
+  <Tiara class="hero-tiara" />
+
+  <p class="hero-pretitle">{t('hero.pretitle')}</p>
+
+  <!-- "Mis XV Años" se queda igual en ambos idiomas: es el título de la celebración. -->
+  <h1 class="hero-title">
+    <span class="hero-title-small">Mis</span>
+    <span class="hero-title-xv">XV</span>
+    <span class="hero-title-small">Años</span>
+  </h1>
+
+  <p class="hero-name">{event.quinceName}</p>
+  <p class="hero-surname">{event.quinceSurname}</p>
+
+  <figure class="arch-frame hero-photo">
+    <Image
+      src={tiara}
+      alt={t('hero.photoAlt')}
+      widths={[360, 720]}
+      sizes="(max-width: 560px) 78vw, 400px"
+      loading="eager"
+      fetchpriority="high"
+    />
+    <figcaption class="ribbon">
+      {t('hero.badge')} · {event.quinceName}
+    </figcaption>
+  </figure>
+
+  <p class="hero-date">{formatLongDate(event.startsAt, lang)}</p>
+
+  <blockquote class="hero-quote">
+    <p>{t('hero.quote')}</p>
+  </blockquote>
+</header>

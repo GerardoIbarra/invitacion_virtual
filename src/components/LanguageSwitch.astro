@@ -1,0 +1,24 @@
+---
+import { languages, useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+<nav class="lang-switch" aria-label={t('lang.switch')}>
+  {Object.entries(languages).map(([code, l]) => (
+    <a
+      href={l.path}
+      hreflang={code}
+      lang={code}
+      title={l.label}
+      aria-current={code === lang ? 'page' : undefined}
+      data-lang-link
+    >
+      {l.short}
+    </a>
+  ))}
+</nav>

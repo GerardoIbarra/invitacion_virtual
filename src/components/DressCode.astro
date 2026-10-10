@@ -1,0 +1,34 @@
+---
+import { useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const t = useTranslations(Astro.props.lang);
+const hexes = ["#1B263B", "#1C1A1F", "#B79A5B", "#5A1F3A"];
+const palette = hexes.map((hex, i) => ({ hex, name: t('dress.colors')[i] }));
+---
+<section class="section dress-section" aria-labelledby="dress-title">
+  <p class="section-eyebrow">{t('dress.eyebrow')}</p>
+  <h2 class="section-title" id="dress-title">{t('dress.title')}</h2>
+
+  <p class="section-lede">
+    {t('dress.ladies')}<br>
+    {t('dress.gentlemen')}
+  </p>
+
+  <ul class="swatches" aria-label={t('dress.palette')}>
+    {palette.map((c) => (
+      <li class="swatch">
+        <span class="swatch-dot" style={`--swatch: ${c.hex}`} aria-hidden="true"></span>
+        <span>{c.name}</span>
+      </li>
+    ))}
+  </ul>
+
+  <p class="reserved-note" role="note">
+    <span class="swatch-dot swatch-reserved" aria-hidden="true"></span>
+    <span><strong>{t('dress.reservedTitle')}</strong> {t('dress.reservedText')}</span>
+  </p>
+</section>

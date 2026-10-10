@@ -1,0 +1,19 @@
+---
+// Filigrana separadora entre secciones, simétrica como en papelería impresa.
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+const half = [
+  'M108 12 C92 12 86 4 76 6 C68 8 69 17 76 16 C81 15 80 9 76 10',
+  'M74 12 C56 12 40 15 12 12',
+  'M96 15 C90 19 82 20 76 19',
+];
+---
+<svg class={`flourish ${className}`} viewBox="0 0 240 24" aria-hidden="true" fill="none"
+  stroke="currentColor" stroke-width="0.9" stroke-linecap="round">
+  <g>{half.map((d) => <path d={d} />)}</g>
+  <g transform="translate(240 0) scale(-1 1)">{half.map((d) => <path d={d} />)}</g>
+  <path d="M120 5 L126 12 L120 19 L114 12 Z" />
+  <circle cx="120" cy="12" r="1.4" fill="currentColor" stroke="none" />
+</svg>

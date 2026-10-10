@@ -1,0 +1,47 @@
+---
+import { event, formatLongDate, mapsUrl, wazeUrl } from '../data/event';
+import { useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+<!-- Presentado como el programa de un baile: hora a la izquierda, momento a la derecha. -->
+<section class="section itinerary-section" aria-labelledby="itinerary-title">
+  <p class="section-eyebrow">{t('itinerary.eyebrow')}</p>
+  <h2 class="section-title" id="itinerary-title">{t('itinerary.title')}</h2>
+  <p class="section-lede">{formatLongDate(event.startsAt, lang)}</p>
+
+  <ol class="programme">
+    {event.itinerary.map((step) => {
+      const venue = 'venue' in step ? event[step.venue] : null;
+      return (
+        <li class="programme-row">
+          <span class="programme-time">{step.time}</span>
+          <div class="programme-body">
+            <h3 class="programme-title">{step.title[lang]}</h3>
+            {venue && (
+              <>
+                <p class="programme-place">{venue.name || t('itinerary.venueTbd')}</p>
+                <p class="programme-address">{venue.address}</p>
+                {/* Sin lugar confirmado, un link a "Charlotte, NC" no ayuda a llegar. */}
+                {venue.name && (
+                  <p class="programme-links">
+                    {t('itinerary.directions')}:{' '}
+                    <a href={mapsUrl(venue.address)} target="_blank" rel="noopener" class="text-link">Google Maps</a>
+                    {' · '}
+                    <a href={wazeUrl(venue.address)} target="_blank" rel="noopener" class="text-link">Waze</a>
+                  </p>
+                )}
+              </>
+            )}
+            {'desc' in step && <p class="programme-desc">{step.desc[lang]}</p>}
+          </div>
+        </li>
+      );
+    })}
+  </ol>
+</section>
