@@ -6,26 +6,17 @@ interface Props {
 }
 
 const t = useTranslations(Astro.props.lang);
-const hexes = ["#1B263B", "#1C1A1F", "#B79A5B", "#5A1F3A"];
-const palette = hexes.map((hex, i) => ({ hex, name: t('dress.colors')[i] }));
 ---
 <section class="section dress-section" aria-labelledby="dress-title">
-  <p class="section-eyebrow">{t('dress.eyebrow')}</p>
-  <h2 class="section-title" id="dress-title">{t('dress.title')}</h2>
+  <h2 class="dress-script-title" id="dress-title">{t('dress.eyebrow')}</h2>
+  <p class="dress-formal-title">{t('dress.title')}</p>
 
-  <p class="section-lede">
-    {t('dress.ladies')}<br>
-    {t('dress.gentlemen')}
-  </p>
-
-  <ul class="swatches" aria-label={t('dress.palette')}>
-    {palette.map((c) => (
-      <li class="swatch">
-        <span class="swatch-dot" style={`--swatch: ${c.hex}`} aria-hidden="true"></span>
-        <span>{c.name}</span>
-      </li>
-    ))}
-  </ul>
+  <svg class="dress-ornament" viewBox="0 0 100 16" aria-hidden="true" fill="none" stroke="currentColor">
+    <path d="M15 8 Q38 8 46 3 Q50 1 54 8 Q58 15 62 8 Q70 8 85 8" stroke-width="0.8" stroke-linecap="round"></path>
+    <circle cx="50" cy="8" r="2" fill="currentColor"></circle>
+    <circle cx="36" cy="8" r="1.3" fill="currentColor"></circle>
+    <circle cx="64" cy="8" r="1.3" fill="currentColor"></circle>
+  </svg>
 
   <p class="reserved-note" role="note">
     <span class="swatch-dot swatch-reserved" aria-hidden="true"></span>

@@ -1,5 +1,5 @@
 ---
-import { event, formatLongDate, mapsUrl, wazeUrl } from '../data/event';
+import { event, formatLongDate, mapsUrl, appleMapsUrl, wazeUrl } from '../data/event';
 import { useTranslations, type Lang } from '../i18n/ui';
 
 interface Props {
@@ -27,11 +27,12 @@ const t = useTranslations(lang);
               <>
                 <p class="programme-place">{venue.name || t('itinerary.venueTbd')}</p>
                 <p class="programme-address">{venue.address}</p>
-                {/* Sin lugar confirmado, un link a "Charlotte, NC" no ayuda a llegar. */}
                 {venue.name && (
                   <p class="programme-links">
                     {t('itinerary.directions')}:{' '}
                     <a href={mapsUrl(venue.address)} target="_blank" rel="noopener" class="text-link">Google Maps</a>
+                    {' · '}
+                    <a href={venue.appleMapsUrl || appleMapsUrl(venue.address)} target="_blank" rel="noopener" class="text-link">Apple Maps</a>
                     {' · '}
                     <a href={wazeUrl(venue.address)} target="_blank" rel="noopener" class="text-link">Waze</a>
                   </p>

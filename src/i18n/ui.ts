@@ -22,6 +22,9 @@ const es = {
 
 
   "hero.pretitle": "Con la bendición de Dios y el amor de mi familia",
+  "hero.titleBefore": "Mis",
+  "hero.titleXV": "XV",
+  "hero.titleAfter": "Años",
   "hero.photoAlt": "Corona de quinceañera sobre seda lila",
   "hero.badge": "15 Primaveras",
   "hero.quote":
@@ -41,12 +44,12 @@ const es = {
   "itinerary.venueTbd": "Lugar por confirmar",
 
 
-  "dress.eyebrow": "Código de vestimenta",
+  "dress.eyebrow": "Código de Vestimenta",
   "dress.title": "Formal",
   "dress.ladies": "Damas: vestido largo.",
   "dress.gentlemen": "Caballeros: traje o esmoquin.",
-  "dress.reservedTitle": "El lila y el lavanda están reservados",
-  "dress.reservedText": "para la quinceañera. Te pedimos con cariño evitar esos tonos.",
+  "dress.reservedTitle": "Se reserva el color lila",
+  "dress.reservedText": "para la quinceañera. Te pedimos con cariño evitar este tono.",
   "dress.palette": "Colores sugeridos",
   "dress.colors": ["Azul noche", "Negro", "Dorado", "Vino"],
 
@@ -94,21 +97,24 @@ const es = {
 export type UI = typeof es;
 
 const en: UI = {
-  "meta.title": (name) => `${name}'s XV`,
-  "meta.description": (parents, name) => `${parents} invite you to celebrate ${name}'s XV.`,
+  "meta.title": (name) => `${name}'s 15th Birthday`,
+  "meta.description": (parents, name) => `${parents} invite you to celebrate ${name}'s 15th Birthday.`,
   "meta.ogDescription": "Date, venue, dress code and RSVP.",
 
   "lang.switch": "Language",
 
-  "welcome.to": "You're invited to my",
-  "welcome.title": "XV",
+  "welcome.to": "You're invited to celebrate",
+  "welcome.title": "Sweet 15",
   "welcome.hint": "Tap the bow to open",
   "welcome.open": "Open invitation",
 
 
   "hero.pretitle": "With God's blessing and the love of my family",
+  "hero.titleBefore": "Sweet",
+  "hero.titleXV": "15",
+  "hero.titleAfter": "Birthday",
   "hero.photoAlt": "Quinceañera tiara on lilac silk",
-  "hero.badge": "15 Springs",
+  "hero.badge": "Sweet 15",
   "hero.quote":
     "Some moments are kept in the heart, and sharing them with the people I love most makes them last forever. Today I leave my childhood behind to begin a new chapter full of dreams.",
 
@@ -117,8 +123,8 @@ const en: UI = {
   "countdown.hours": "Hours",
   "countdown.minutes": "Min",
   "countdown.calendar": "Add to calendar",
-  "calendar.title": (name) => `${name}'s XV`,
-  "calendar.details": (name, parents) => `Celebrating ${name}'s XV. With love, ${parents}.`,
+  "calendar.title": (name) => `${name}'s 15th Birthday`,
+  "calendar.details": (name, parents) => `Celebrating ${name}'s 15th Birthday. With love, ${parents}.`,
 
   "itinerary.eyebrow": "When & where",
   "itinerary.title": "Schedule",
@@ -126,12 +132,12 @@ const en: UI = {
   "itinerary.venueTbd": "Venue to be announced",
 
 
-  "dress.eyebrow": "Dress code",
+  "dress.eyebrow": "Dress Code",
   "dress.title": "Formal",
   "dress.ladies": "Ladies: floor-length dress.",
   "dress.gentlemen": "Gentlemen: suit or tuxedo.",
-  "dress.reservedTitle": "Lilac and lavender are reserved",
-  "dress.reservedText": "for the quinceañera. We kindly ask you to avoid those colors.",
+  "dress.reservedTitle": "Lilac is reserved",
+  "dress.reservedText": "for the quinceañera. We kindly ask you to avoid this shade.",
   "dress.palette": "Suggested colors",
   "dress.colors": ["Midnight blue", "Black", "Gold", "Burgundy"],
 
@@ -153,7 +159,7 @@ const en: UI = {
   "rsvp.cta": "RSVP",
   "rsvp.person": "guest",
   "rsvp.people": "guests",
-  "rsvp.wa.title": (name) => `RSVP — ${name}'s XV`,
+  "rsvp.wa.title": (name) => `RSVP — ${name}'s 15th Birthday`,
   "rsvp.wa.guest": "Guest",
   "rsvp.wa.attendance": "Attending",
   "rsvp.wa.yes": (people) => `Yes, ${people}`,
@@ -162,10 +168,10 @@ const en: UI = {
 
   "pass.eyebrow": "Updates with your RSVP",
   "pass.title": "Your pass",
-  "pass.brand": "XV",
+  "pass.brand": "SWEET 15",
   "pass.for": (name) => `Pass for: ${name}`,
   "pass.defaultGuest": "Special guest",
-  "pass.passes": "Guests:",
+  "pass.passes": "Passes:",
 
   "family.label": "Parents and godparents",
   "family.parents": "My parents",

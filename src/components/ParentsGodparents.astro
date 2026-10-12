@@ -1,17 +1,18 @@
 ---
-import { event } from '../data/event';
+import { formatParents, formatGodparents } from '../data/event';
 import { useTranslations, type Lang } from '../i18n/ui';
 
 interface Props {
   lang: Lang;
 }
 
-const t = useTranslations(Astro.props.lang);
+const { lang } = Astro.props;
+const t = useTranslations(lang);
 ---
 <section class="section family-section" aria-label={t('family.label')}>
   <h2 class="section-eyebrow">{t('family.parents')}</h2>
-  <p class="family-names">{event.parents}</p>
+  <p class="family-names">{formatParents(lang)}</p>
 
   <h2 class="section-eyebrow">{t('family.godparents')}</h2>
-  <p class="family-names">{event.godparents}</p>
+  <p class="family-names">{formatGodparents(lang)}</p>
 </section>

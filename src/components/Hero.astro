@@ -17,11 +17,10 @@ const t = useTranslations(lang);
 
   <p class="hero-pretitle">{t('hero.pretitle')}</p>
 
-  <!-- "Mis XV Años" se queda igual en ambos idiomas: es el título de la celebración. -->
   <h1 class="hero-title">
-    <span class="hero-title-small">Mis</span>
-    <span class="hero-title-xv">XV</span>
-    <span class="hero-title-small">Años</span>
+    {t('hero.titleBefore') && <span class="hero-title-small">{t('hero.titleBefore')}</span>}
+    <span class="hero-title-xv">{t('hero.titleXV')}</span>
+    {t('hero.titleAfter') && <span class="hero-title-small">{t('hero.titleAfter')}</span>}
   </h1>
 
   <p class="hero-name">{event.quinceName}</p>

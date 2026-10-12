@@ -9,7 +9,7 @@ export default defineConfig({
   // o define la variable de entorno SITE_URL al compilar.
   site: process.env.SITE_URL || 'https://karenxv.pages.dev',
 
-  // El inglés es el idioma por defecto (/). Los links viejos a /en/ siguen funcionando.
+  // El inglés es el idioma por defecto (/). Los enlaces a /en redirigen a /.
   redirects: {
     '/en': '/',
   },

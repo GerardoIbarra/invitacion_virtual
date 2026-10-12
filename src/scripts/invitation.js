@@ -1,7 +1,7 @@
 import { event } from "../data/event";
 import { isLang, useTranslations } from "../i18n/ui";
 
-const lang = isLang(document.documentElement.lang) ? document.documentElement.lang : "en";
+const lang = isLang(document.documentElement.lang) ? document.documentElement.lang : "es";
 const t = useTranslations(lang);
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const $ = (id) => document.getElementById(id);
@@ -83,8 +83,35 @@ function initGate() {
     }, steps[1]);
   }
 
+  const AUTO_OPEN_KEY = "xv_auto_open";
+  const urlParams = new URLSearchParams(window.location.search);
+  const shouldAutoOpen = urlParams.get("open") === "1" || sessionStorage.getItem(AUTO_OPEN_KEY) === "1";
+  if (shouldAutoOpen) {
+    try { sessionStorage.removeItem(AUTO_OPEN_KEY); } catch {}
+    if (urlParams.get("open")) {
+      window.history.replaceState({}, "", window.location.pathname);
+    }
+    setTimeout(() => open(), 80);
+  }
+
   // Todo el arco abre, no solo el moño: es más fácil de atinar.
   arch.addEventListener("click", () => open());
+
+  // Botones de abrir en inglés o en español
+  document.querySelectorAll("[data-open-lang]").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const targetLang = btn.getAttribute("data-open-lang");
+      const currentLang = document.documentElement.lang;
+
+      if (targetLang === currentLang) {
+        open();
+      } else {
+        try { sessionStorage.setItem(AUTO_OPEN_KEY, "1"); } catch {}
+        window.location.href = targetLang === "es" ? "/es/" : "/";
+      }
+    });
+  });
 }
 
 // ---------------------------------------------------------------------------

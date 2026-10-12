@@ -227,7 +227,24 @@ const petals = Array.from({ length: 12 }, () => ({
         </svg>
       ))}
 
-      <p class="gate-hint" aria-hidden="true">{t('welcome.hint')}</p>
+      <div class="gate-actions" role="group" aria-label="Elegir idioma para abrir / Choose language to open">
+        <button
+          type="button"
+          class="gate-lang-btn"
+          data-open-lang="en"
+          aria-label="Open invitation in English"
+        >
+          Open in English
+        </button>
+        <button
+          type="button"
+          class="gate-lang-btn"
+          data-open-lang="es"
+          aria-label="Abrir invitación en Español"
+        >
+          Abrir en Español
+        </button>
+      </div>
     </div>
 
     <svg class="gate-keystone" viewBox="0 0 60 46" aria-hidden="true">

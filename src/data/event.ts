@@ -29,11 +29,13 @@ export const event = {
   // "Lugar por confirmar" y no enseña los botones de mapas.
   church: {
     name: "",
-    address: "Charlotte, NC",
+    address: "Mooresville, NC",
+    appleMapsUrl: "",
   },
   salon: {
-    name: "",
-    address: "Charlotte, NC",
+    name: "Heritage House",
+    address: "494 E Plaza Dr, Mooresville, NC 28115",
+    appleMapsUrl: "https://maps.apple/p/NJP-y4oFYVaD6H",
   },
 
   itinerary: [
@@ -48,7 +50,7 @@ export const event = {
     {
       time: "8:30 PM",
       title: { es: "Entrada y vals", en: "Grand entrance & waltz" },
-      desc: { es: "Con papás, padrinos y chambelanes.", en: "With parents, godparents and chambelanes." },
+      desc: { es: "Con papás, padrinos y chambelanes.", en: "With parents, godparents and court of honor." },
     },
     {
       time: "9:30 PM",
@@ -64,6 +66,14 @@ export const event = {
 } as const;
 
 export type EventData = typeof event;
+
+export function formatParents(lang: Lang): string {
+  return lang === "en" ? "Rebecca & Daniel Arce" : "Rebecca y Daniel Arce";
+}
+
+export function formatGodparents(lang: Lang): string {
+  return lang === "en" ? "Freddy & Nidia García" : "Freddy y Nidia García";
+}
 
 const localeOf = (lang: Lang) => languages[lang].locale;
 
@@ -94,10 +104,11 @@ function toUtcStamp(iso: string | Date): string {
 
 function calendarEvent(lang: Lang) {
   const t = useTranslations(lang);
+  const primaryVenue = event.church.name ? event.church : event.salon;
   return {
     title: t("calendar.title")(event.quinceName),
-    details: t("calendar.details")(event.quinceName, event.parents),
-    location: [event.church.name, event.church.address].filter(Boolean).join(", "),
+    details: t("calendar.details")(event.quinceName, formatParents(lang)),
+    location: [primaryVenue.name, primaryVenue.address].filter(Boolean).join(", "),
     start: toUtcStamp(event.startsAt),
     end: toUtcStamp(event.endsAt),
   };
@@ -172,6 +183,11 @@ function foldLine(line: string): string {
 
 export function mapsUrl(address: string): string {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+}
+
+export function appleMapsUrl(address: string, customUrl?: string): string {
+  if (customUrl) return customUrl;
+  return `https://maps.apple.com/?q=${encodeURIComponent(address)}`;
 }
 
 export function wazeUrl(address: string): string {
