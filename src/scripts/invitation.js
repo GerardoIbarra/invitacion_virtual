@@ -1,12 +1,7 @@
 import { event } from "../data/event";
-import { isLang, useTranslations } from "../i18n/ui";
 
-const lang = isLang(document.documentElement.lang) ? document.documentElement.lang : "es";
-const t = useTranslations(lang);
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const $ = (id) => document.getElementById(id);
-
-const fullName = `${event.quinceName} ${event.quinceSurname}`.trim();
 
 // ---------------------------------------------------------------------------
 // Portón de bienvenida
@@ -216,110 +211,7 @@ function initCountdown() {
 }
 
 // ---------------------------------------------------------------------------
-// Confirmación por WhatsApp
-// ---------------------------------------------------------------------------
-const people = (n) => `${n} ${Number(n) === 1 ? t("rsvp.person") : t("rsvp.people")}`;
-
-function initRSVP() {
-  const form = $("rsvp-form");
-  const nameInput = $("guest-name");
-  const nameError = $("guest-name-error");
-  const passesInput = $("guest-passes");
-  const passesGroup = $("passes-group");
-  if (!form || !nameInput || !passesInput) return;
-
-  const MIN_PASSES = Number(passesInput.min);
-  const MAX_PASSES = Number(passesInput.max);
-  const attending = () => form.elements.attendance.value === "si";
-
-  function setPasses(n) {
-    const clamped = Math.min(MAX_PASSES, Math.max(MIN_PASSES, Number(n) || MIN_PASSES));
-    passesInput.value = clamped;
-    $("step-minus").disabled = clamped <= MIN_PASSES;
-    $("step-plus").disabled = clamped >= MAX_PASSES;
-    updateTicket();
-  }
-
-  function updateTicket() {
-    const name = nameInput.value.trim() || t("pass.defaultGuest");
-    const passes = passesInput.value;
-    const guestEl = $("ticket-guest-name");
-    const countEl = $("ticket-passes-count");
-    if (guestEl) guestEl.textContent = t("pass.for")(name);
-    if (countEl) countEl.textContent = people(passes);
-  }
-
-  $("step-minus").addEventListener("click", () => setPasses(Number(passesInput.value) - 1));
-  $("step-plus").addEventListener("click", () => setPasses(Number(passesInput.value) + 1));
-  passesInput.addEventListener("change", () => setPasses(passesInput.value));
-
-  nameInput.addEventListener("input", () => {
-    if (nameInput.value.trim()) {
-      nameError.hidden = true;
-      nameInput.removeAttribute("aria-invalid");
-    }
-    updateTicket();
-  });
-
-  // Si no asiste, el número de personas no aplica (menos campos = menos fricción).
-  form.addEventListener("change", (e) => {
-    if (e.target.name === "attendance") passesGroup.hidden = !attending();
-  });
-
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const guestName = nameInput.value.trim();
-    if (!guestName) {
-      nameError.hidden = false;
-      nameInput.setAttribute("aria-invalid", "true");
-      nameInput.focus();
-      return;
-    }
-
-    const guestMessage = $("guest-message").value.trim();
-    const answer = attending() ? t("rsvp.wa.yes")(people(passesInput.value)) : t("rsvp.wa.no");
-    const lines = [
-      `*${t("rsvp.wa.title")(fullName)}*`,
-      ``,
-      `*${t("rsvp.wa.guest")}:* ${guestName}`,
-      `*${t("rsvp.wa.attendance")}:* ${answer}`,
-    ];
-    if (guestMessage) lines.push(`*${t("rsvp.wa.message")}:* ${guestMessage}`);
-
-    const url = `https://wa.me/${event.whatsappPhone.replace(/\D/g, "")}?text=${encodeURIComponent(lines.join("\n"))}`;
-    // Debe abrirse dentro del mismo evento de clic; con un setTimeout los
-    // navegadores móviles lo bloquean como ventana emergente.
-    window.open(url, "_blank", "noopener");
-  });
-
-  setPasses(passesInput.value);
-}
-
-// ---------------------------------------------------------------------------
-// Botón flotante de confirmar: visible cuando el invitado ya pasó la portada
-// y todavía no está viendo el formulario.
-// ---------------------------------------------------------------------------
-function initFloatingCta() {
-  const cta = $("rsvp-cta");
-  const hero = document.querySelector(".hero-section");
-  const rsvp = $("rsvp-anchor");
-  if (!cta || !hero || !rsvp || !("IntersectionObserver" in window)) return;
-
-  const visible = { hero: true, rsvp: false };
-  const observer = new IntersectionObserver((entries) => {
-    for (const entry of entries) {
-      visible[entry.target === hero ? "hero" : "rsvp"] = entry.isIntersecting;
-    }
-    cta.hidden = visible.hero || visible.rsvp;
-  });
-  observer.observe(hero);
-  observer.observe(rsvp);
-}
-
-// ---------------------------------------------------------------------------
 initLanguageLinks();
 initParticles();
 initGate();
 initCountdown();
-initRSVP();
-initFloatingCta();

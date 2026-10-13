@@ -1,7 +1,7 @@
 ---
 import '../styles/global.css';
 import { getImage } from 'astro:assets';
-import { event, PLACEHOLDER_PHONE } from '../data/event';
+import { event } from '../data/event';
 import { languages, useTranslations, type Lang } from '../i18n/ui';
 import ogPhoto from '../assets/tiara.jpg';
 
@@ -12,8 +12,6 @@ import Countdown from '../components/Countdown.astro';
 import ParentsGodparents from '../components/ParentsGodparents.astro';
 import Itinerary from '../components/Itinerary.astro';
 import DressCode from '../components/DressCode.astro';
-import RSVP from '../components/RSVP.astro';
-import VIPPass from '../components/VIPPass.astro';
 import Footer from '../components/Footer.astro';
 import Flourish from '../components/Flourish.astro';
 
@@ -22,12 +20,6 @@ interface Props {
 }
 
 const { lang } = Astro.props;
-
-if ((event.whatsappPhone as string) === PLACEHOLDER_PHONE) {
-  console.warn(
-    '⚠  El número de WhatsApp en src/data/event.ts sigue siendo el de ejemplo: las confirmaciones no le llegarán a nadie.',
-  );
-}
 
 const t = useTranslations(lang);
 // Imagen horizontal (≈1.91:1), el formato que WhatsApp e iMessage muestran grande.
@@ -79,7 +71,7 @@ const pageUrl = absolute(languages[lang].path);
 
   <!--
     Orden pensado en lo que el invitado viene a resolver:
-    cuándo → dónde → qué ponerse → confirmar. Lo emotivo y opcional va después.
+    cuándo → dónde → qué ponerse. Lo emotivo y opcional va después.
   -->
   <main id="invitation-main" class="paper blurred-init" tabindex="-1">
     <Hero lang={lang} />
@@ -88,14 +80,10 @@ const pageUrl = absolute(languages[lang].path);
     <Itinerary lang={lang} />
     <Flourish />
     <DressCode lang={lang} />
-    <RSVP lang={lang} />
-    <VIPPass lang={lang} />
     <Flourish />
     <ParentsGodparents lang={lang} />
     <Footer lang={lang} />
   </main>
-
-  <a href="#rsvp-anchor" id="rsvp-cta" class="rsvp-cta" hidden>{t('rsvp.cta')}</a>
 
   <script src="../scripts/invitation.js"></script>
 </body>

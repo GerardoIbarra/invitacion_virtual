@@ -11,7 +11,7 @@ export type Lang = keyof typeof languages;
 const es = {
   "meta.title": (name: string) => `XV Años de ${name}`,
   "meta.description": (parents: string, name: string) => `${parents} te invitan a celebrar los XV años de ${name}.`,
-  "meta.ogDescription": "Fecha, lugar, código de vestimenta y confirmación de asistencia.",
+  "meta.ogDescription": "Fecha, lugar y código de vestimenta.",
 
   "lang.switch": "Idioma",
 
@@ -19,7 +19,6 @@ const es = {
   "welcome.title": "XV Años",
   "welcome.hint": "Toca el moño para abrir",
   "welcome.open": "Abrir invitación",
-
 
   "hero.pretitle": "Con la bendición de Dios y el amor de mi familia",
   "hero.titleBefore": "Mis",
@@ -43,7 +42,6 @@ const es = {
   "itinerary.directions": "Cómo llegar",
   "itinerary.venueTbd": "Lugar por confirmar",
 
-
   "dress.eyebrow": "Código de Vestimenta",
   "dress.title": "Formal",
   "dress.ladies": "Damas: vestido largo.",
@@ -52,38 +50,6 @@ const es = {
   "dress.reservedText": "para la quinceañera. Te pedimos con cariño evitar este tono.",
   "dress.palette": "Colores sugeridos",
   "dress.colors": ["Azul noche", "Negro", "Dorado", "Vino"],
-
-  "rsvp.eyebrow": (date: string) => `Confirma antes del ${date}`,
-  "rsvp.title": "¿Nos acompañas?",
-  "rsvp.attendance": "Asistencia",
-  "rsvp.yes": "Sí, ahí estaré",
-  "rsvp.no": "No podré asistir",
-  "rsvp.name": "Nombre o familia",
-  "rsvp.namePlaceholder": "Ej. Familia Pérez Hernández",
-  "rsvp.nameError": "Escribe tu nombre para saber quién confirma.",
-  "rsvp.guests": "Número de personas",
-  "rsvp.less": "Quitar una persona",
-  "rsvp.more": "Agregar una persona",
-  "rsvp.message": (name: string) => `Mensaje para ${name}`,
-  "rsvp.optional": "(opcional)",
-  "rsvp.messagePlaceholder": "Tus buenos deseos…",
-  "rsvp.submit": "Confirmar por WhatsApp",
-  "rsvp.cta": "Confirmar asistencia",
-  "rsvp.person": "persona",
-  "rsvp.people": "personas",
-  "rsvp.wa.title": (name: string) => `Confirmación — XV Años de ${name}`,
-  "rsvp.wa.guest": "Invitado",
-  "rsvp.wa.attendance": "Asistencia",
-  "rsvp.wa.yes": (people: string) => `Sí, ${people}`,
-  "rsvp.wa.no": "No podré asistir",
-  "rsvp.wa.message": "Mensaje",
-
-  "pass.eyebrow": "Se actualiza con tu confirmación",
-  "pass.title": "Tu pase",
-  "pass.brand": "XV AÑOS",
-  "pass.for": (name: string) => `Pase para: ${name}`,
-  "pass.defaultGuest": "Invitado especial",
-  "pass.passes": "Pases:",
 
   "family.label": "Padres y padrinos",
   "family.parents": "Mis padres",
@@ -99,7 +65,7 @@ export type UI = typeof es;
 const en: UI = {
   "meta.title": (name) => `${name}'s 15th Birthday`,
   "meta.description": (parents, name) => `${parents} invite you to celebrate ${name}'s 15th Birthday.`,
-  "meta.ogDescription": "Date, venue, dress code and RSVP.",
+  "meta.ogDescription": "Date, venue and dress code.",
 
   "lang.switch": "Language",
 
@@ -107,7 +73,6 @@ const en: UI = {
   "welcome.title": "Sweet 15",
   "welcome.hint": "Tap the bow to open",
   "welcome.open": "Open invitation",
-
 
   "hero.pretitle": "With God's blessing and the love of my family",
   "hero.titleBefore": "Sweet",
@@ -131,7 +96,6 @@ const en: UI = {
   "itinerary.directions": "Directions",
   "itinerary.venueTbd": "Venue to be announced",
 
-
   "dress.eyebrow": "Dress Code",
   "dress.title": "Formal",
   "dress.ladies": "Ladies: floor-length dress.",
@@ -140,38 +104,6 @@ const en: UI = {
   "dress.reservedText": "for the quinceañera. We kindly ask you to avoid this shade.",
   "dress.palette": "Suggested colors",
   "dress.colors": ["Midnight blue", "Black", "Gold", "Burgundy"],
-
-  "rsvp.eyebrow": (date) => `Please reply by ${date}`,
-  "rsvp.title": "Will you join us?",
-  "rsvp.attendance": "Attendance",
-  "rsvp.yes": "Yes, I'll be there",
-  "rsvp.no": "Sorry, I can't make it",
-  "rsvp.name": "Name or family",
-  "rsvp.namePlaceholder": "e.g. The Pérez Family",
-  "rsvp.nameError": "Please enter your name so we know who's replying.",
-  "rsvp.guests": "Number of guests",
-  "rsvp.less": "Remove one guest",
-  "rsvp.more": "Add one guest",
-  "rsvp.message": (name) => `Message for ${name}`,
-  "rsvp.optional": "(optional)",
-  "rsvp.messagePlaceholder": "Your best wishes…",
-  "rsvp.submit": "Reply via WhatsApp",
-  "rsvp.cta": "RSVP",
-  "rsvp.person": "guest",
-  "rsvp.people": "guests",
-  "rsvp.wa.title": (name) => `RSVP — ${name}'s 15th Birthday`,
-  "rsvp.wa.guest": "Guest",
-  "rsvp.wa.attendance": "Attending",
-  "rsvp.wa.yes": (people) => `Yes, ${people}`,
-  "rsvp.wa.no": "Can't make it",
-  "rsvp.wa.message": "Message",
-
-  "pass.eyebrow": "Updates with your RSVP",
-  "pass.title": "Your pass",
-  "pass.brand": "SWEET 15",
-  "pass.for": (name) => `Pass for: ${name}`,
-  "pass.defaultGuest": "Special guest",
-  "pass.passes": "Passes:",
 
   "family.label": "Parents and godparents",
   "family.parents": "My parents",

@@ -3,9 +3,6 @@
 
 import { languages, useTranslations, type Lang } from "../i18n/ui";
 
-// Mientras whatsappPhone sea este número, la compilación muestra un aviso.
-export const PLACEHOLDER_PHONE = "5215555555555";
-
 export const event = {
   quinceName: "Karen",
   quinceSurname: "Arce",
@@ -20,10 +17,6 @@ export const event = {
   // Hora local del evento (inicio de la ceremonia) y fin aproximado de la fiesta.
   startsAt: "2026-11-07T17:00:00-05:00",
   endsAt: "2026-11-08T02:00:00-05:00",
-  rsvpDeadline: "2026-10-31T12:00:00-04:00",
-
-  // Número de ejemplo. Debe llevar código de país: EE. UU. es 1 (ej. 17045551234).
-  whatsappPhone: "5215555555555",
 
   // Lugares pendientes. Mientras el nombre esté vacío, la invitación muestra
   // "Lugar por confirmar" y no enseña los botones de mapas.
@@ -82,19 +75,6 @@ export function formatLongDate(iso: string, lang: Lang): string {
     weekday: "long", year: "numeric", month: "long", day: "numeric", timeZone: event.timeZone,
   });
   return s.charAt(0).toUpperCase() + s.slice(1);
-}
-
-export function formatShortDate(iso: string, lang: Lang): string {
-  return new Date(iso).toLocaleDateString(localeOf(lang), { day: "numeric", month: "long", timeZone: event.timeZone });
-}
-
-// Ej.: "07 • NOV • 2026"
-export function formatTicketDate(iso: string, lang: Lang): string {
-  const d = new Date(iso);
-  const part = (opts: Intl.DateTimeFormatOptions) =>
-    d.toLocaleDateString(localeOf(lang), { ...opts, timeZone: event.timeZone });
-  const month = part({ month: "short" }).replace(".", "").toUpperCase();
-  return [part({ day: "2-digit" }), month, part({ year: "numeric" })].join(" • ");
 }
 
 // Hora en UTC con el formato que usan Google Calendar e iCalendar: 20261107T220000Z
