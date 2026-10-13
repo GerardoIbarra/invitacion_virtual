@@ -6,25 +6,20 @@ import { languages, useTranslations, type Lang } from "../i18n/ui";
 export const event = {
   quinceName: "Karen",
   quinceSurname: "Arce",
-  parents: "Rebecca y Daniel Arce",
-  godparents: "Freddy y Nidia García",
+  parents: "Daniel y Rebecca Arce",
+  godparents: "Freddy y Nidia Garcia",
   hashtag: "#KarenXVEnLila",
 
   // Charlotte, NC. El 7 de noviembre de 2026 ya terminó el horario de verano,
   // así que el desfase es -05:00 (EST). Si cambia la fecha, revisa el desfase.
   timeZone: "America/New_York",
 
-  // Hora local del evento (inicio de la ceremonia) y fin aproximado de la fiesta.
+  // Hora local del evento (llegada de invitados) y fin aproximado de la fiesta.
   startsAt: "2026-11-07T17:00:00-05:00",
   endsAt: "2026-11-08T02:00:00-05:00",
 
-  // Lugares pendientes. Mientras el nombre esté vacío, la invitación muestra
-  // "Lugar por confirmar" y no enseña los botones de mapas.
-  church: {
-    name: "",
-    address: "Mooresville, NC",
-    appleMapsUrl: "",
-  },
+  // Mientras el nombre esté vacío, la invitación muestra "Lugar por confirmar"
+  // y no enseña los botones de mapas.
   salon: {
     name: "Heritage House",
     address: "494 E Plaza Dr, Mooresville, NC 28115",
@@ -33,27 +28,31 @@ export const event = {
 
   itinerary: [
     {
-      time: "5:00 PM", venue: "church",
-      title: { es: "Ceremonia religiosa", en: "Religious ceremony" },
+      time: "5:00 PM", venue: "salon",
+      title: { es: "Llegada de invitados", en: "Guests arrive" },
     },
     {
-      time: "7:00 PM", venue: "salon",
-      title: { es: "Recepción y cóctel", en: "Reception & cocktails" },
+      time: "5:30 PM",
+      title: { es: "Entrada de la quinceañera", en: "Grand entrance" },
+    },
+    {
+      time: "5:30 PM",
+      title: { es: "Cena", en: "Dinner is served" },
+      desc: { es: "Se sirve hasta las 7:00 PM.", en: "Served until 7:00 PM." },
+    },
+    {
+      time: "7:00 PM",
+      title: { es: "Coronación, cambio de zapatillas y última muñeca", en: "Coronation, change of shoes & last doll" },
+      desc: { es: "Tradiciones que simbolizan su paso a mujer, seguidas del brindis.", en: "Traditions that symbolize the passage into womanhood, followed by a toast." },
+    },
+    {
+      time: "7:30 PM",
+      title: { es: "Baile con papá", en: "Father–daughter dance" },
+      desc: { es: "Después, baile con la familia, el vals y un baile sorpresa.", en: "Followed by the family dance, the waltz and a surprise dance." },
     },
     {
       time: "8:30 PM",
-      title: { es: "Entrada y vals", en: "Grand entrance & waltz" },
-      desc: { es: "Con papás, padrinos y chambelanes.", en: "With parents, godparents and court of honor." },
-    },
-    {
-      time: "9:30 PM",
-      title: { es: "Cena", en: "Dinner" },
-      desc: { es: "Banquete y brindis de honor.", en: "Banquet and toast." },
-    },
-    {
-      time: "10:30 PM",
-      title: { es: "Fiesta", en: "Party" },
-      desc: { es: "Música en vivo hasta el cierre.", en: "Live music until the end of the night." },
+      title: { es: "¡A festejar!", en: "Time to party" },
     },
   ],
 } as const;
@@ -61,11 +60,11 @@ export const event = {
 export type EventData = typeof event;
 
 export function formatParents(lang: Lang): string {
-  return lang === "en" ? "Rebecca & Daniel Arce" : "Rebecca y Daniel Arce";
+  return lang === "en" ? "Daniel & Rebecca Arce" : "Daniel y Rebecca Arce";
 }
 
 export function formatGodparents(lang: Lang): string {
-  return lang === "en" ? "Freddy & Nidia García" : "Freddy y Nidia García";
+  return lang === "en" ? "Freddy & Nidia Garcia" : "Freddy y Nidia Garcia";
 }
 
 const localeOf = (lang: Lang) => languages[lang].locale;
@@ -84,11 +83,10 @@ function toUtcStamp(iso: string | Date): string {
 
 function calendarEvent(lang: Lang) {
   const t = useTranslations(lang);
-  const primaryVenue = event.church.name ? event.church : event.salon;
   return {
     title: t("calendar.title")(event.quinceName),
     details: t("calendar.details")(event.quinceName, formatParents(lang)),
-    location: [primaryVenue.name, primaryVenue.address].filter(Boolean).join(", "),
+    location: [event.salon.name, event.salon.address].filter(Boolean).join(", "),
     start: toUtcStamp(event.startsAt),
     end: toUtcStamp(event.endsAt),
   };
