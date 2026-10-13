@@ -55,6 +55,10 @@ const es = {
   "family.parents": "Mis padres",
   "family.godparents": "Mis padrinos",
 
+  "gift.eyebrow": "Sugerencia de regalo",
+  "gift.title": "Lluvia de sobres",
+  "gift.text": (name: string) => `Tu presencia es nuestro mejor regalo. Si deseas tener un detalle con ${name}, en la recepción habrá una caja para sobres.`,
+
   "footer.share": "Comparte tus fotos con",
   "footer.blessing": "Gracias por formar parte de este día que quedará por siempre en mi corazón.",
   "footer.love": "Con amor,",
@@ -108,6 +112,10 @@ const en: UI = {
   "family.label": "Parents and godparents",
   "family.parents": "My parents",
   "family.godparents": "My godparents",
+
+  "gift.eyebrow": "Gift suggestion",
+  "gift.title": "Envelope shower",
+  "gift.text": (name) => `Your presence is the greatest gift. If you'd like to give ${name} something, there will be a box for envelopes at the reception.`,
 
   "footer.share": "Share your photos with",
   "footer.blessing": "Thank you for being part of a day that will stay in my heart forever.",

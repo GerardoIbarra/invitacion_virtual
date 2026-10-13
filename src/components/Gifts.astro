@@ -1,0 +1,24 @@
+---
+import { event } from '../data/event';
+import { useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const t = useTranslations(Astro.props.lang);
+---
+<section class="section gift-section" aria-labelledby="gift-title">
+  <!-- Sobre dibujado a línea, con un sello al centro de la solapa. -->
+  <svg class="gift-envelope" viewBox="0 0 64 44" aria-hidden="true" fill="none"
+    stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="4" y="6" width="56" height="34" rx="2" />
+    <path d="M4 8 L32 27 L60 8" />
+    <path d="M4 38 L24 22 M60 38 L40 22" stroke-width="0.8" />
+    <circle cx="32" cy="27" r="3.2" fill="var(--paper, #FBF7F0)" />
+  </svg>
+
+  <p class="section-eyebrow">{t('gift.eyebrow')}</p>
+  <h2 class="section-title" id="gift-title">{t('gift.title')}</h2>
+  <p class="section-lede">{t('gift.text')(event.quinceName)}</p>
+</section>
