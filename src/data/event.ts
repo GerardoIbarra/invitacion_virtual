@@ -10,6 +10,12 @@ export const event = {
   godparents: "Freddy y Nidia Garcia",
   hashtag: "#KarenXVEnLila",
 
+  rsvp: {
+    phone: "17047494020",
+    displayPhone: "+1 (704) 749-4020",
+    recipientName: "Rebecca",
+  },
+
   // Charlotte, NC. El 7 de noviembre de 2026 ya terminó el horario de verano,
   // así que el desfase es -05:00 (EST). Si cambia la fecha, revisa el desfase.
   timeZone: "America/New_York",
@@ -171,3 +177,10 @@ export function appleMapsUrl(address: string, customUrl?: string): string {
 export function wazeUrl(address: string): string {
   return `https://waze.com/ul?q=${encodeURIComponent(address)}&navigate=yes`;
 }
+
+export function rsvpWhatsAppUrl(lang: Lang, count = 2): string {
+  const t = useTranslations(lang);
+  const text = t("rsvp.whatsappMsg")(event.quinceName, count);
+  return `https://api.whatsapp.com/send?phone=${event.rsvp.phone}&text=${encodeURIComponent(text)}`;
+}
+

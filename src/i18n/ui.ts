@@ -59,6 +59,23 @@ const es = {
   "gift.title": "Lluvia de sobres",
   "gift.text": (name: string) => `Tu presencia es nuestro mejor regalo. Si deseas tener un detalle con ${name}, en la recepción habrá una caja para sobres.`,
 
+  "rsvp.calendarAlt": "Calendario con corazón",
+  "rsvp.title": "Confirmar asistencia",
+  "rsvp.eyebrow": "POR FAVOR CONFIRMA TU ASISTENCIA LO MÁS ANTES POSIBLE",
+  "rsvp.nameLabel": "Tu nombre o familia",
+  "rsvp.namePlaceholder": "Ej. Familia Martínez",
+  "rsvp.guestsLabel": "¿Cuántas personas asistirán?",
+  "rsvp.button": "CONFIRMAR AQUÍ",
+  "rsvp.shareIntro": "Los mejores recuerdos se crean con personas especiales como ustedes.",
+  "rsvp.shareTag": "Hashtag, etiqueta y comparte:",
+  "rsvp.hope": "Esperamos contar con tu presencia",
+  "rsvp.thanks": "¡MUCHAS GRACIAS!",
+  "rsvp.whatsappMsg": (quince: string, count: number) => {
+    return count === 1
+      ? `¡Hola Rebecca! Confirmo mi asistencia a los XV Años de ${quince} 🎉\n\nAsistirá: 1 persona.\n\n¡Muchas gracias!`
+      : `¡Hola Rebecca! Confirmo nuestra asistencia a los XV Años de ${quince} 🎉\n\nPersonas que asistiremos: ${count}\n\n¡Muchas gracias!`;
+  },
+
   "footer.share": "Comparte tus fotos con",
   "footer.blessing": "Gracias por formar parte de este día que quedará por siempre en mi corazón.",
   "footer.love": "Con amor,",
@@ -116,6 +133,23 @@ const en: UI = {
   "gift.eyebrow": "Gift suggestion",
   "gift.title": "Envelope shower",
   "gift.text": (name) => `Your presence is the greatest gift. If you'd like to give ${name} something, there will be a box for envelopes at the reception.`,
+
+  "rsvp.calendarAlt": "Calendar with heart",
+  "rsvp.title": "Confirm attendance",
+  "rsvp.eyebrow": "PLEASE CONFIRM YOUR ATTENDANCE AS SOON AS POSSIBLE",
+  "rsvp.nameLabel": "Your name or family",
+  "rsvp.namePlaceholder": "e.g. Martinez Family",
+  "rsvp.guestsLabel": "How many guests will attend?",
+  "rsvp.button": "CONFIRM HERE",
+  "rsvp.shareIntro": "The best memories are created with special people like you.",
+  "rsvp.shareTag": "Hashtag, tag & share:",
+  "rsvp.hope": "We look forward to celebrating with you",
+  "rsvp.thanks": "THANK YOU SO MUCH!",
+  "rsvp.whatsappMsg": (quince: string, count: number) => {
+    return count === 1
+      ? `Hello Rebecca! Confirming my attendance for ${quince}'s Sweet 15 🎉\n\n1 guest attending.\n\nThank you!`
+      : `Hello Rebecca! Confirming our attendance for ${quince}'s Sweet 15 🎉\n\nGuests attending: ${count}\n\nThank you!`;
+  },
 
   "footer.share": "Share your photos with",
   "footer.blessing": "Thank you for being part of a day that will stay in my heart forever.",

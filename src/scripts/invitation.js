@@ -211,7 +211,61 @@ function initCountdown() {
 }
 
 // ---------------------------------------------------------------------------
+// Confirmación de asistencia (RSVP vía WhatsApp)
+// ---------------------------------------------------------------------------
+function initRsvp() {
+  const minusBtn = $("rsvp-minus");
+  const plusBtn = $("rsvp-plus");
+  const countDisplay = $("rsvp-count");
+  const submitBtn = $("rsvp-submit-btn");
+  if (!submitBtn) return;
+
+  const phone = submitBtn.dataset.phone || (event.rsvp && event.rsvp.phone) || "17047494020";
+  const quinceName = submitBtn.dataset.quince || event.quinceName || "Karen";
+  const lang = document.documentElement.lang === "en" ? "en" : "es";
+
+  let count = 2;
+
+  function updateLink() {
+    let msg = "";
+    if (lang === "en") {
+      msg = count === 1
+        ? `Hello Rebecca! Confirming my attendance for ${quinceName}'s Sweet 15 🎉\n\n1 guest attending.\n\nThank you!`
+        : `Hello Rebecca! Confirming our attendance for ${quinceName}'s Sweet 15 🎉\n\nGuests attending: ${count}\n\nThank you!`;
+    } else {
+      msg = count === 1
+        ? `¡Hola Rebecca! Confirmo mi asistencia a los XV Años de ${quinceName} 🎉\n\nAsistirá: 1 persona.\n\n¡Muchas gracias!`
+        : `¡Hola Rebecca! Confirmo nuestra asistencia a los XV Años de ${quinceName} 🎉\n\nPersonas que asistiremos: ${count}\n\n¡Muchas gracias!`;
+    }
+
+    submitBtn.href = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(msg)}`;
+    if (countDisplay) countDisplay.textContent = String(count);
+  }
+
+  if (minusBtn) {
+    minusBtn.addEventListener("click", () => {
+      if (count > 1) {
+        count--;
+        updateLink();
+      }
+    });
+  }
+
+  if (plusBtn) {
+    plusBtn.addEventListener("click", () => {
+      if (count < 20) {
+        count++;
+        updateLink();
+      }
+    });
+  }
+
+  updateLink();
+}
+
+// ---------------------------------------------------------------------------
 initLanguageLinks();
 initParticles();
 initGate();
 initCountdown();
+initRsvp();
