@@ -192,10 +192,12 @@ function initCountdown() {
   const days = $("cd-days");
   const hours = $("cd-hours");
   const minutes = $("cd-minutes");
+  const seconds = $("cd-seconds");
   if (!days || !hours || !minutes) return;
 
   const pad = (n) => String(n).padStart(2, "0");
-  const MIN = 60 * 1000;
+  const SEC = 1000;
+  const MIN = 60 * SEC;
   const HOUR = 60 * MIN;
   const DAY = 24 * HOUR;
 
@@ -204,10 +206,11 @@ function initCountdown() {
     days.textContent = pad(Math.floor(distance / DAY));
     hours.textContent = pad(Math.floor((distance % DAY) / HOUR));
     minutes.textContent = pad(Math.floor((distance % HOUR) / MIN));
+    if (seconds) seconds.textContent = pad(Math.floor((distance % MIN) / SEC));
   }
 
   update();
-  setInterval(update, 30 * 1000);
+  setInterval(update, 1000);
 }
 
 // ---------------------------------------------------------------------------
