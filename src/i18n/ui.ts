@@ -71,7 +71,7 @@ const es = {
   "rsvp.shareTag": "Hashtag, etiqueta y comparte:",
   "rsvp.hope": "Esperamos contar con tu presencia",
   "rsvp.thanks": "¡MUCHAS GRACIAS!",
-  "rsvp.whatsappMsg": (quince: string, count: number) => {
+  "rsvp.message": (quince: string, count: number) => {
     return count === 1
       ? `¡Hola Rebecca! Confirmo mi asistencia a los XV Años de ${quince} 🎉\n\nAsistirá: 1 persona.\n\n¡Muchas gracias!`
       : `¡Hola Rebecca! Confirmo nuestra asistencia a los XV Años de ${quince} 🎉\n\nPersonas que asistiremos: ${count}\n\n¡Muchas gracias!`;
@@ -147,7 +147,7 @@ const en: UI = {
   "rsvp.shareTag": "Hashtag, tag & share:",
   "rsvp.hope": "We look forward to celebrating with you",
   "rsvp.thanks": "THANK YOU SO MUCH!",
-  "rsvp.whatsappMsg": (quince: string, count: number) => {
+  "rsvp.message": (quince: string, count: number) => {
     return count === 1
       ? `Hello Rebecca! Confirming my attendance for ${quince}'s Sweet 15 🎉\n\n1 guest attending.\n\nThank you!`
       : `Hello Rebecca! Confirming our attendance for ${quince}'s Sweet 15 🎉\n\nGuests attending: ${count}\n\nThank you!`;
@@ -167,3 +167,4 @@ export function useTranslations(lang: Lang) {
 export function isLang(value: string | undefined): value is Lang {
   return !!value && value in languages;
 }
+

@@ -178,9 +178,12 @@ export function wazeUrl(address: string): string {
   return `https://waze.com/ul?q=${encodeURIComponent(address)}&navigate=yes`;
 }
 
-export function rsvpWhatsAppUrl(lang: Lang, count = 2): string {
+export function rsvpSmsUrl(lang: Lang, count = 2): string {
   const t = useTranslations(lang);
-  const text = t("rsvp.whatsappMsg")(event.quinceName, count);
-  return `https://api.whatsapp.com/send?phone=${event.rsvp.phone}&text=${encodeURIComponent(text)}`;
+  const text = t("rsvp.message")(event.quinceName, count);
+  const phone = event.rsvp.phone.startsWith("+") ? event.rsvp.phone : `+${event.rsvp.phone}`;
+  return `sms:${phone}?&body=${encodeURIComponent(text)}`;
 }
+
+export const rsvpWhatsAppUrl = rsvpSmsUrl;
 

@@ -214,7 +214,7 @@ function initCountdown() {
 }
 
 // ---------------------------------------------------------------------------
-// Confirmación de asistencia (RSVP vía WhatsApp)
+// Confirmación de asistencia (RSVP vía SMS)
 // ---------------------------------------------------------------------------
 function initRsvp() {
   const minusBtn = $("rsvp-minus");
@@ -241,7 +241,8 @@ function initRsvp() {
         : `¡Hola Rebecca! Confirmo nuestra asistencia a los XV Años de ${quinceName} 🎉\n\nPersonas que asistiremos: ${count}\n\n¡Muchas gracias!`;
     }
 
-    submitBtn.href = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(msg)}`;
+    const normalizedPhone = phone.startsWith("+") ? phone : `+${phone}`;
+    submitBtn.href = `sms:${normalizedPhone}?&body=${encodeURIComponent(msg)}`;
     if (countDisplay) countDisplay.textContent = String(count);
   }
 
@@ -272,3 +273,4 @@ initParticles();
 initGate();
 initCountdown();
 initRsvp();
+
